@@ -17,6 +17,30 @@ print_usage() {
   echo ""
 }
 
+ARGS=$(getopt -o c: -l "checksum:" -n "bitnami-pkg" -- "$@");
+if [ $? -ne 0 ];
+then
+  exit 1
+fi
+
+eval set -- "$ARGS";
+
+while true; do
+  case "$1" in
+    -c|--checksum)
+      shift;
+      if [ -n "$1" ]; then
+        PACKAGE_SHA256=$1
+        shift;
+      fi
+      ;;
+    --)
+      shift;
+      break;
+      ;;
+  esac
+done
+
 case "$1" in
   install|unpack)
     ;;
@@ -41,7 +65,6 @@ CACHE_ROOT=/tmp/bitnami/pkg/cache
 PACKAGE="$2-linux-x64"
 PACKAGE_ARGS=${@:3}
 PACKAGE_NAME=$(echo $PACKAGE | sed 's/-[0-9].*//')
-PACKAGE_SHA256=$(printenv $(echo ${PACKAGE_NAME^^}_PACKAGE_SHA256 | sed 's/-/_/') || true)
 
 mkdir -p $INSTALL_ROOT
 cd $INSTALL_ROOT
