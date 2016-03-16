@@ -1,0 +1,69 @@
+#!/bin/bash
+set -e
+
+print_usage() {
+  echo "Usage: bitnami-pkg <COMMAND> <PACKAGE>-<VERSION> [ARG ...]"
+  echo ""
+  echo "Download and install Stacksmith packages"
+  echo ""
+  echo "Commands:"
+  echo "   install - Download and install a package."
+  echo "   unpack  - Download and unpack a package."
+  echo "   help    - This help text"
+  echo ""
+  echo "Examples:"
+  echo "   bitnami-pkg install nginx-1.9.10-0     - Install NGINX package"
+  echo "   bitnami-pkg unpack mariadb-10.1.11-0   - Unpack MariaDB package"
+  echo ""
+}
+
+case "$1" in
+  install|unpack)
+    ;;
+  help)
+    print_usage
+    exit 0
+    ;;
+  *)
+    print_usage
+    exit 1
+    ;;
+esac
+
+if [ $# -lt 2 ]; then
+  print_usage
+  exit 1
+fi
+
+INSTALL_ROOT=/tmp/bitnami/pkg/install
+CACHE_ROOT=/tmp/bitnami/pkg/cache
+
+PACKAGE="$2-linux-x64"
+PACKAGE_ARGS=${@:3}
+PACKAGE_NAME=$(echo $PACKAGE | sed 's/-[0-9].*//')
+PACKAGE_SHA256=$(printenv $(echo ${PACKAGE_NAME^^}_PACKAGE_SHA256 | sed 's/-/_/') || true)
+
+mkdir -p $INSTALL_ROOT
+cd $INSTALL_ROOT
+
+echo "===> Downloading $PACKAGE package"
+if [ -f $CACHE_ROOT/$PACKAGE.tar.gz ]; then
+  echo "===> $CACHE_ROOT/$PACKAGE_NAME.tar.gz already exists, skipping download."
+  cp $CACHE_ROOT/$PACKAGE.tar.gz .
+else
+  curl -sSLO https://downloads.bitnami.com/files/stacksmith/$PACKAGE.tar.gz
+fi
+
+if [ "$PACKAGE_SHA256" ]; then
+  echo "===> Verifying package integrity"
+  echo "$PACKAGE_SHA256  $PACKAGE.tar.gz" | sha256sum -c -
+fi
+
+tar xzf $PACKAGE.tar.gz
+case "$1" in
+  install) echo "===> Installing $PACKAGE" ;;
+  unpack) echo "===> Unpacking $PACKAGE" ;;
+esac
+harpoon $1 $PACKAGE $PACKAGE_ARGS
+
+rm -rf $INSTALL_ROOT
