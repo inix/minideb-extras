@@ -11,11 +11,11 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt /var/cache/apt/archives/* /tmp/*
 
-ENV HARPOON_VERSION 1.0.0-0
+ENV HARPOON_VERSION 1.0.1-0
 
 RUN cd /tmp && \
   curl -sSLO http://downloads.bitnami.com/files/harpoon/harpoon-$HARPOON_VERSION-linux-x64.tar.gz && \
-  echo "5b6b2cccc6060d3784af058a6a7cbe2c0a48b6fcac704a60c3b897d24ddce48c  harpoon-$HARPOON_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
+  echo "00312c9d0b2145b94836b06e471e4d66f6e78840ad1179026e0fa9ac102b5c92  harpoon-$HARPOON_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
   mkdir -p /opt/bitnami/harpoon && \
   tar xzf harpoon-$HARPOON_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/harpoon && \
   rm harpoon-$HARPOON_VERSION-linux-x64.tar.gz
