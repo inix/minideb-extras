@@ -9,10 +9,10 @@ print_usage() {
   echo "Commands:"
   echo "  install                    Download and install a package."
   echo "  unpack                     Download and unpack a package."
-  echo "  help                       This help text."
   echo ""
   echo "Options:"
   echo "  -c, --checksum             SHA256 verification checksum."
+  echo "  -h, --help                 Show this help message and exit."
   echo ""
   echo "Examples:"
   echo "  - Unpack package"
@@ -26,14 +26,14 @@ print_usage() {
   echo ""
 }
 
-ARGS=$(getopt -o c: -l "checksum:" -n "bitnami-pkg" -- "$@");
+# break up command line for easy parsing and check legal options
+ARGS=$(getopt -o c:h -l "checksum:,help" -n "bitnami-pkg" -- "$@")
 if [ $? -ne 0 ];
 then
   exit 1
 fi
 
 eval set -- "$ARGS";
-
 while true; do
   case "$1" in
     -c|--checksum)
@@ -43,6 +43,10 @@ while true; do
         shift;
       fi
       ;;
+    -h|--help)
+      print_usage
+      exit 0
+      ;;
     --)
       shift;
       break;
@@ -50,19 +54,19 @@ while true; do
   esac
 done
 
+# weed out unrecognized commands
 case "$1" in
   install|unpack)
     ;;
-  help)
-    print_usage
-    exit 0
-    ;;
   *)
+    echo "ERROR: Unrecognized command: $1"
+    echo ""
     print_usage
     exit 1
     ;;
 esac
 
+# install/unpack command need to be supplied a package name
 if [ $# -lt 2 ]; then
   print_usage
   exit 1
