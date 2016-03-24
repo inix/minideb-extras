@@ -2,18 +2,27 @@
 set -e
 
 print_usage() {
-  echo "Usage: bitnami-pkg <COMMAND> <PACKAGE>-<VERSION> [ARG ...]"
+  echo "Usage: bitnami-pkg <COMMAND> <PACKAGE>-<VERSION> [OPTIONS] -- [ARGS]"
   echo ""
   echo "Download and install Stacksmith packages"
   echo ""
   echo "Commands:"
-  echo "   install - Download and install a package."
-  echo "   unpack  - Download and unpack a package."
-  echo "   help    - This help text"
+  echo "  install                    Download and install a package."
+  echo "  unpack                     Download and unpack a package."
+  echo "  help                       This help text."
+  echo ""
+  echo "Options:"
+  echo "  -c, --checksum             SHA256 verification checksum."
   echo ""
   echo "Examples:"
-  echo "   bitnami-pkg install nginx-1.9.10-0     - Install NGINX package"
-  echo "   bitnami-pkg unpack mariadb-10.1.11-0   - Unpack MariaDB package"
+  echo "  - Unpack package"
+  echo "    \$ bitnami-pkg unpack nginx-1.9.10-0"
+  echo ""
+  echo "  - Verify and Install package"
+  echo "    \$ bitnami-pkg install nginx-1.9.10-0 --checksum 15565d06b18c2e3710fc08e579ddb3d0e39aa663264a0f7404f0743cb4cdb58d"
+  echo ""
+  echo "  - Install package with arguments"
+  echo "    \$ bitnami-pkg unpack mariadb-10.1.11-0 -- --password bitnami"
   echo ""
 }
 
