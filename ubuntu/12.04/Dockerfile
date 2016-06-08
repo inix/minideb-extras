@@ -1,4 +1,4 @@
-FROM ubuntu:precise-20160503
+FROM ubuntu:precise-20160526
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
