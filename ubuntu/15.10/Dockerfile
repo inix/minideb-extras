@@ -1,4 +1,4 @@
-FROM ubuntu:wily-20160526
+FROM ubuntu:wily-20160602
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \

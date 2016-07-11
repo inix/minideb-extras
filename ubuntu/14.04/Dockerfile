@@ -1,4 +1,4 @@
-FROM ubuntu:trusty-20160526
+FROM ubuntu:trusty-20160624
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
