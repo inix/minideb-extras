@@ -23,12 +23,9 @@ check_for_updates() {
 print_image_welcome_page() {
   GITHUB_PAGE=https://github.com/bitnami/bitnami-docker-${BITNAMI_APP_NAME}
 cat << EndOfMessage
-       ___ _ _                   _
-      | _ |_) |_ _ _  __ _ _ __ (_)
-      | _ \\ |  _| ' \\/ _\` | '  \\| |
-      |___/_|\\__|_|_|\\__,_|_|_|_|_|
 
   *** Welcome to the ${BITNAMI_APP_NAME} image ***
+  *** Brought to you by Bitnami ***
   *** More information: ${GITHUB_PAGE} ***
   *** Issues: ${GITHUB_PAGE}/issues ***
 
@@ -41,34 +38,18 @@ print_stacksmith_welcome_page() {
   STACKSMITH_STACK_URL="$STACKSMITH_URL/dashboard/stacks/$STACKSMITH_STACK_ID"
 
   if [ "$STACKSMITH_STACK_PRIVATE" ]; then
-    MSG1="Go to $STACKSMITH_STACK_URL"
-    MSG2="to manage your stack."
+    MSG1="Go to $STACKSMITH_STACK_URL to manage your stack."
   else
     MSG1="This stack was created anonymously."
-    MSG2="Sign up for a free account at $STACKSMITH_URL"
-    MSG3="to manage and regenerate your stacks."
+    MSG2="Sign up for a free account at $STACKSMITH_URL to manage and regenerate your stacks."
   fi
 
   cat << EndOfMessage
 
-        _____
- ______/_____\_______
-/                    \\
-!    Bitnami         !
-!      Stacksmith    !
-\____________________/
-         {\ }
-         { \}
-         L_ }
-        / _)}
-       / /__L
- _____/ (____)  Welcome to your $STACKSMITH_STACK_NAME container!
-        (____)  $MSG1
- _____  (____)  $MSG2
-      \_(____)  $MSG3
-         {\ }
-         { \}
-         \__/
+  Welcome to your $STACKSMITH_STACK_NAME container!
+  Brought to you by Bitnami.
+  $MSG1
+  $MSG2
 
 EndOfMessage
 }
