@@ -46,10 +46,10 @@ print_stacksmith_welcome_page() {
 
   cat << EndOfMessage
 
-  Welcome to your $STACKSMITH_STACK_NAME container!
-  Brought to you by Bitnami.
-  $MSG1
-  $MSG2
+  *** Welcome to your $STACKSMITH_STACK_NAME container! ***
+  *** Brought to you by Bitnami. ***
+  *** $MSG1 ***
+  *** $MSG2 ***
 
 EndOfMessage
 }
