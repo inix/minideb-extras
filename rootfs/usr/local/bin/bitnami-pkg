@@ -108,6 +108,11 @@ else
   curl $CURL_ARGS -LO https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz
 fi
 
+if [[ $(file $PACKAGE.tar.gz) != "gzip compressed data"* ]]; then
+    echo "ERROR: The downloaded file is not a valid tar.gz file. Maybe it is not available for download. Remember, format is <PACKAGE>-<VERSION>."
+    exit 1
+fi
+
 if [ "$PACKAGE_SHA256" ]; then
   echo "===> Verifying package integrity"
   echo "$PACKAGE_SHA256  $PACKAGE.tar.gz" | sha256sum -c -
