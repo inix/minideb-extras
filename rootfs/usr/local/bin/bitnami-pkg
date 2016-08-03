@@ -105,8 +105,7 @@ else
   else
     CURL_ARGS="-sS"
   fi
-  curl $CURL_ARGS -LOf https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz
-  if [ $? != 0 ]; then
+  if ! $CURL_ARGS -LOf https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz; then
     echo "ERROR: Requested package does not exist"
     exit 1
   fi
