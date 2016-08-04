@@ -105,7 +105,15 @@ else
   else
     CURL_ARGS="-sS"
   fi
-  curl $CURL_ARGS -LO https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz
+  if ! curl $CURL_ARGS -LOf https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz; then
+    echo "ERROR: Requested package '$PACKAGE' does not exist"
+    exit 1
+  fi
+fi
+
+if [[ $(file $PACKAGE.tar.gz) != "gzip compressed data"* ]]; then
+    echo "ERROR: The downloaded file is not a valid tar.gz file"
+    exit 1
 fi
 
 if [ "$PACKAGE_SHA256" ]; then
