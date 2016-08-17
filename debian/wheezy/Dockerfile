@@ -2,7 +2,7 @@ FROM google/debian:wheezy
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates sudo procps && \
+  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates sudo procps libaio1 && \
   apt-get upgrade -y && \
   useradd -ms /bin/bash bitnami && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
