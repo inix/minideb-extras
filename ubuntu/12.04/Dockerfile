@@ -2,7 +2,7 @@ FROM ubuntu:precise-20160707
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates sudo && \
+  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates sudo libaio1 && \
   adduser bitnami --disabled-password --gecos "" && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
