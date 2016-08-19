@@ -111,9 +111,9 @@ else
   fi
 fi
 
-if [[ $(file --mime-type $PACKAGE.tar.gz | awk '{print $2}') != "application/gzip" ]]; then
-    echo "ERROR: The downloaded file is not a valid tar.gz file"
-    exit 1
+if ! tar tzf $PACKAGE.tar.gz >/dev/null 2>&1; then
+  echo "ERROR: Invalid or corrupt '$PACKAGE' package."
+  exit 1
 fi
 
 if [ "$PACKAGE_SHA256" ]; then
