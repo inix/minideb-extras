@@ -10,14 +10,14 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt /var/cache/apt/archives/* /tmp/*
 
-ENV HARPOON_VERSION=1.0.2-0
+ENV NAMI_VERSION 0.0.3-0
 
 RUN cd /tmp && \
-  curl -sSLO https://downloads.bitnami.com/files/harpoon/harpoon-$HARPOON_VERSION-linux-x64.tar.gz && \
-  echo "afaa9127b6666c7581bfa1b5df8f9f97fd79fd721bcb72a906ba8a43a5e09ca4  harpoon-$HARPOON_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
-  mkdir -p /opt/bitnami/harpoon && \
-  tar xzf harpoon-$HARPOON_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/harpoon && \
-  rm harpoon-$HARPOON_VERSION-linux-x64.tar.gz
+  curl -sSLO https://nami-prod.s3.amazonaws.com/tools/nami/releases/nami-$NAMI_VERSION-linux-x64.tar.gz && \
+  echo "34c186f7fcd04a5f54c409b334e945c60cf863ddd65f6a584ebc4e385fbb5283  nami-$NAMI_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
+  mkdir -p /opt/bitnami/nami && \
+  tar xzf nami-$NAMI_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/nami && \
+  rm nami-$NAMI_VERSION-linux-x64.tar.gz
 
 ENV TINI_VERSION v0.9.0
 
@@ -30,7 +30,7 @@ RUN cd /tmp && \
   mv tini /usr/local/bin/ && \
   rm tini.asc
 
-ENV PATH=/opt/bitnami/harpoon/bin:$PATH
+ENV PATH=/opt/bitnami/nami/bin:$PATH
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
