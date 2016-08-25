@@ -11,14 +11,14 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt /var/cache/apt/archives/* /tmp/*
 
-ENV NAMI_VERSION v0.0.3
+ENV NAMI_VERSION 0.0.3-0
 
 RUN cd /tmp && \
-  curl -sSLO https://nami-prod.s3.amazonaws.com/tools/nami/releases/nami-linux-x64-$NAMI_VERSION.tar.gz && \
+  curl -sSLO https://nami-prod.s3.amazonaws.com/tools/nami/releases/nami-$NAMI_VERSION-linux-x64.tar.gz && \
   echo "34c186f7fcd04a5f54c409b334e945c60cf863ddd65f6a584ebc4e385fbb5283  nami-linux-x64-$NAMI_VERSION.tar.gz" | sha256sum -c - && \
   mkdir -p /opt/bitnami/nami && \
-  tar xzf nami-linux-x64-$NAMI_VERSION.tar.gz --strip 1 -C /opt/bitnami/nami && \
-  rm nami-linux-x64-$NAMI_VERSION.tar.gz
+  tar xzf nami-$NAMI_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/nami && \
+  rm nami-$NAMI_VERSION-linux-x64.tar.gz
 
 ENV TINI_VERSION v0.9.0
 
