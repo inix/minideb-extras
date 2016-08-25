@@ -1,4 +1,4 @@
-FROM google/debian:wheezy
+FROM debian:7.11
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \

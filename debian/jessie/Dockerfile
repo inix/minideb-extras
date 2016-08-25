@@ -1,4 +1,4 @@
-FROM google/debian:jessie
+FROM debian:8.5
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
