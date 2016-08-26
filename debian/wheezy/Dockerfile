@@ -1,4 +1,4 @@
-FROM debian:7.11
+FROM debian@sha256:1e21d6ccae906c032fb20c9d5a8d834d6673b6f760aefcf41315a253f87d9c2b
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
