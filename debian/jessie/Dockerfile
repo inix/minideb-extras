@@ -1,9 +1,8 @@
-FROM google/debian:jessie
+FROM debian@sha256:ffb60fdbc401b2a692eef8d04616fca15905dce259d1499d96521970ed0bec36
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates sudo procps libaio1 && \
-  apt-get upgrade -y && \
   useradd -ms /bin/bash bitnami && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
