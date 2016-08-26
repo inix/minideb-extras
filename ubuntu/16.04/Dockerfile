@@ -1,4 +1,4 @@
-FROM ubuntu:xenial-20160809
+FROM ubuntu:xenial-20160818
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
