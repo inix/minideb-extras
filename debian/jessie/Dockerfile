@@ -13,11 +13,11 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt /var/cache/apt/archives/* /tmp/*
 
-ENV NAMI_VERSION 0.0.3-0
+ENV NAMI_VERSION 0.0.3-1
 
 RUN cd /tmp && \
   curl -sSLO https://nami-prod.s3.amazonaws.com/tools/nami/releases/nami-$NAMI_VERSION-linux-x64.tar.gz && \
-  echo "34c186f7fcd04a5f54c409b334e945c60cf863ddd65f6a584ebc4e385fbb5283  nami-$NAMI_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
+  echo "be00a5e510fcc9e67a0b572fbca93d02c985c933c7c4c81c1b976f5b85004c6c  nami-$NAMI_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
   mkdir -p /opt/bitnami/nami && \
   tar xzf nami-$NAMI_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/nami && \
   rm nami-$NAMI_VERSION-linux-x64.tar.gz
