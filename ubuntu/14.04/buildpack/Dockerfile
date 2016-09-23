@@ -1,4 +1,4 @@
-FROM gcr.io/stacksmith-images/ubuntu:14.04-r9
+FROM gcr.io/stacksmith-images/ubuntu:14.04-r10
 
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y build-essential git pkg-config unzip && \
