@@ -1,4 +1,4 @@
-FROM gcr.io/stacksmith-images/ubuntu:15.10-r1
+FROM gcr.io/stacksmith-images/ubuntu:15.10-r2
 
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y build-essential git pkg-config unzip && \
