@@ -1,4 +1,4 @@
-FROM debian@sha256:ffb60fdbc401b2a692eef8d04616fca15905dce259d1499d96521970ed0bec36
+FROM debian@sha256:677f184a5969847c0ad91d30cf1f0b925cd321e6c66e3ed5fbf9858f58425d1a
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
