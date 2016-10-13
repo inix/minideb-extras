@@ -1,0 +1,14 @@
+sudo: required
+language: generic
+services:
+- docker
+script:
+- DEV_BUILD=1 make build
+after_success:
+- >
+  if [ -n $TRAVIS_TAG ] && [ -n $GCLOUD_SERVICE_KEY ]; then
+    make $(echo $TRAVIS_TAG | cut -d'-' -f1 | sed -e 's/\//-/')
+    echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
+    gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$($TRAVIS_TAG | sed -e 's/\//:/')
+  fi
