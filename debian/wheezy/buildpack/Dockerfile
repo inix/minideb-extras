@@ -1,5 +1,3 @@
-FROM gcr.io/stacksmith-images/debian:wheezy-r10
-
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y build-essential git pkg-config unzip && \
   apt-get clean && \
