@@ -1,0 +1,37 @@
+sudo: required
+language: generic
+services:
+- docker
+env:
+- GCLOUD_PROJECT=stacksmith-images
+
+before_install:
+- >
+  for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy debian:jessie; do
+    distro=$(echo $i | cut -d':' -f1)
+    release=$(echo $i | cut -d':' -f2)
+    docker pull gcr.io/$GCLOUD_PROJECT/$i-rDEV || true
+    docker pull gcr.io/$GCLOUD_PROJECT/$distro-buildpack:$release-rDEV || true
+  done
+
+script:
+- DEV_BUILD=1 make build
+
+after_success:
+- >
+  if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
+    gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+      for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy debian:jessie; do
+        distro=$(echo $i | cut -d':' -f1)
+        release=$(echo $i | cut -d':' -f2)
+        gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$i-rDEV
+        gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$distro-buildpack:$release-rDEV
+      done
+    elif [ ! -z $TRAVIS_TAG ]; then
+      make $(echo $TRAVIS_TAG | cut -d'-' -f1 | sed -e 's/\//-/')
+      gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$($TRAVIS_TAG | sed -e 's/\//:/')
+    fi
+  fi
