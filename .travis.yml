@@ -15,7 +15,7 @@ before_install:
   done
 
 script:
-- DEV_BUILD=1 make minideb-jessie
+- DEV_BUILD=1 make build
 
 after_success:
 - >
