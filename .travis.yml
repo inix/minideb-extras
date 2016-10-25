@@ -4,11 +4,9 @@ services:
 - docker
 env:
 - GCLOUD_PROJECT=stacksmith-images
-- CLOUDSDK_PYTHON_SITEPACKAGES=1
 
 before_install:
 - >
-  sudo apt-get install -y python-openssl
   for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy minideb:jessie; do
     distro=$(echo $i | cut -d':' -f1)
     release=$(echo $i | cut -d':' -f2)
