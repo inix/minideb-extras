@@ -2,7 +2,7 @@ FROM bitnami/minideb@sha256:aa85785a15e0d5f2869357ed60156c84f22c4907dd7b711b0134
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates sudo locales procps libaio1 libssl1.0.0 && \
+  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates cron sudo locales procps libaio1 libssl1.0.0 && \
   useradd -ms /bin/bash bitnami && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
