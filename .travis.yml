@@ -21,7 +21,7 @@ after_success:
 - >
   if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
-    gcloud auth activate-service-account $GCLOUD_EMAIL --key-file ${HOME}/gcloud-service-key.json
+    gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
 
     if [ "$TRAVIS_BRANCH" == "master" ]; then
       for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy minideb:jessie; do
