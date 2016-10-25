@@ -2,7 +2,7 @@
 
 all: build
 
-build: ubuntu-12.04 ubuntu-14.04 ubuntu-15.10 ubuntu-16.04 debian-wheezy debian-jessie
+build: ubuntu-12.04 ubuntu-14.04 ubuntu-15.10 ubuntu-16.04 debian-wheezy minideb-jessie
 
 %::
 	@distro=$$(echo "$@" | cut -d'-' -f1) ; \
