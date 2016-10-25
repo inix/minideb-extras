@@ -7,7 +7,7 @@ env:
 
 before_install:
 - >
-  for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy debian:jessie; do
+  for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy minideb:jessie; do
     distro=$(echo $i | cut -d':' -f1)
     release=$(echo $i | cut -d':' -f2)
     docker pull gcr.io/$GCLOUD_PROJECT/$i-rDEV || true
@@ -24,7 +24,7 @@ after_success:
     gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
 
     if [ "$TRAVIS_BRANCH" == "master" ]; then
-      for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy debian:jessie; do
+      for i in ubuntu:12.04 ubuntu:14.04 ubuntu:15.10 ubuntu:16.04 debian:wheezy minideb:jessie; do
         distro=$(echo $i | cut -d':' -f1)
         release=$(echo $i | cut -d':' -f2)
         gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$i-rDEV
