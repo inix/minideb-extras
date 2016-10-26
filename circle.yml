@@ -4,7 +4,6 @@ machine:
   services:
   - docker
   environment:
-    IMAGE_FLAVORS: ubuntu-14.04 ubuntu-16.04 debian-jessie minideb-jessie
     GCLOUD_PROJECT: stacksmith-images
 
 dependencies:
@@ -14,7 +13,7 @@ dependencies:
 
 test:
   override:
-  - make DEV_BUILD=1 build
+  - make ${CIRCLE_TAG:+IMAGE_FLAVORS=${CIRCLE_TAG%-*}} DEV_BUILD=1 build
 
 deployment:
   development:
