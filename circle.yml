@@ -14,7 +14,7 @@ dependencies:
 
 test:
   override:
-  - make DEV_BUILD=1 build
+  - make ${CIRCLE_TAG:+IMAGE_FLAVORS=${CIRCLE_TAG%-*}} DEV_BUILD=1 build
 
 deployment:
   development:
