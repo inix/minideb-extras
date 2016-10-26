@@ -1,0 +1,27 @@
+machine:
+  pre:
+  - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  services:
+  - docker
+  environment:
+    IMAGE_FLAVORS: ubuntu-14.04 ubuntu-16.04 debian-jessie minideb-jessie
+    GCLOUD_PROJECT: stacksmith-images
+
+dependencies:
+  override:
+  - docker info
+  - gcloud version
+
+test:
+  override:
+  - make DEV_BUILD=1 build
+
+deployment:
+  development:
+    branch: master
+    commands:
+    - make GCLOUD_SERVICE_KEY=$GCLOUD_SERVICE_KEY DEV_BUILD=1 push
+  release:
+    tag: /.*/
+    commands:
+    - make GCLOUD_SERVICE_KEY=$GCLOUD_SERVICE_KEY IMAGE_FLAVORS=${CIRCLE_TAG%-*} push
