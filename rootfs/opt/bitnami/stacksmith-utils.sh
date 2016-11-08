@@ -103,7 +103,17 @@ check_for_stack_updates() {
 # Checks for any updates for this Bitnami Docker image
 check_for_image_updates() {
   UPDATE_SERVER="https://container.checkforupdates.com"
-  ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
+  ORIGIN=$BITNAMI_CONTAINER_ORIGIN
+
+  if [ -n "$CHE_API_ENDPOINT" ]; then
+    DISABLE_UPDATE_MESSAGE=1
+    if [ "$CHE_API_ENDPOINT" == "https://codenvy.io/api" ]; then
+      ORIGIN=${ORIGIN:-codenvy}
+    else
+      ORIGIN=${ORIGIN:-che}
+    fi
+  fi
+  ORIGIN=${ORIGIN:-DHR}
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
@@ -125,7 +135,7 @@ check_for_image_updates() {
     MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
   fi
 
-  if [ "$MSG" ]; then
+  if [ -z "$DISABLE_UPDATE_MESSAGE" -a "$MSG" ]; then
     printf "\n$COLOR*** $MSG ***\e[0m\n\n"
   fi
 }
