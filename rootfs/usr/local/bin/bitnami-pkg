@@ -96,7 +96,7 @@ cd $INSTALL_ROOT
 
 echo "===> Downloading $PACKAGE package"
 if [ -f $CACHE_ROOT/$PACKAGE.tar.gz ]; then
-  echo "===> $CACHE_ROOT/$PACKAGE_NAME.tar.gz already exists, skipping download."
+  echo "===> $CACHE_ROOT/$PACKAGE.tar.gz already exists, skipping download."
   cp $CACHE_ROOT/$PACKAGE.tar.gz .
 else
   # display cURL progress bar when a tty is attached
