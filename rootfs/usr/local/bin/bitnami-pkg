@@ -112,9 +112,14 @@ else
   else
     CURL_ARGS="-sS"
   fi
-  if ! curl $CURL_ARGS -LOf https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz; then
-    echo "ERROR: Requested package '$PACKAGE' does not exist"
-    exit 1
+  if ! curl $CURL_ARGS -LOf "https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz"; then
+    echo "WARNING: Package name '$PACKAGE' does not exist, will try '${PACKAGE%-$(identify_distro)}'..."
+    if curl $CURL_ARGS -LOf "https://downloads.bitnami.com/files/$RELEASE_BUCKET/${PACKAGE%-$(identify_distro)}.tar.gz"; then
+      PACKAGE="${PACKAGE%-$(identify_distro)}"
+    else
+      echo "ERROR: Could not find the requested package..."
+      exit 1
+    fi
   fi
 fi
 
