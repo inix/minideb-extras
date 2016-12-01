@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -e
 
 print_usage() {
   echo "Usage: bitnami-pkg <COMMAND> <PACKAGE>-<VERSION> [OPTIONS] -- [ARGS]"
@@ -28,6 +27,14 @@ print_usage() {
   echo "  - Install package from testing"
   echo "    \$ bitnami-pkg install mariadb-10.1.11-0 --bucket testing"
   echo ""
+}
+
+identify_distro() {
+  distro="unknown"
+  if [ -f /etc/os-release ]; then
+    distro="$(grep "^ID=" /etc/os-release | cut -d'=' -f2 | cut -d'"' -f2)-$(grep "^VERSION_ID=" /etc/os-release | cut -d'=' -f2 | cut -d'"' -f2)"
+  fi
+  echo "$distro"
 }
 
 # break up command line for easy parsing and check legal options
@@ -86,7 +93,7 @@ fi
 INSTALL_ROOT=/tmp/bitnami/pkg/install
 CACHE_ROOT=/tmp/bitnami/pkg/cache
 
-PACKAGE="$2-linux-x64"
+PACKAGE="$2-linux-x64-$(identify_distro)"
 PACKAGE_ARGS=${@:3}
 PACKAGE_NAME=$(echo $PACKAGE | sed 's/-[0-9].*//')
 RELEASE_BUCKET=${RELEASE_BUCKET:-stacksmith}
@@ -105,9 +112,14 @@ else
   else
     CURL_ARGS="-sS"
   fi
-  if ! curl $CURL_ARGS -LOf https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz; then
-    echo "ERROR: Requested package '$PACKAGE' does not exist"
-    exit 1
+  if ! curl $CURL_ARGS -LOf "https://downloads.bitnami.com/files/$RELEASE_BUCKET/$PACKAGE.tar.gz"; then
+    echo "WARNING: Package name '$PACKAGE' does not exist, will try '${PACKAGE%-$(identify_distro)}'..."
+    if curl $CURL_ARGS -LOf "https://downloads.bitnami.com/files/$RELEASE_BUCKET/${PACKAGE%-$(identify_distro)}.tar.gz"; then
+      PACKAGE="${PACKAGE%-$(identify_distro)}"
+    else
+      echo "ERROR: Could not find the requested package..."
+      exit 1
+    fi
   fi
 fi
 
