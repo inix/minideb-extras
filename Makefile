@@ -1,4 +1,4 @@
-IMAGE_FLAVORS := ubuntu/12.04 ubuntu/14.04 ubuntu/16.04 debian/wheezy minideb/jessie
+IMAGE_FLAVORS := minideb/jessie
 GCLOUD_PROJECT := stacksmith-images
 GCLOUD_SERVICE_KEY :=
 
