@@ -1,4 +1,4 @@
-FROM bitnami/minideb@sha256:8cf93e215e3577564088526d12779aeddc5ceed52e439bb69c32ece49c0ed600
+FROM bitnami/minideb@sha256:b1ad120dd699ac2568dfb597b8042bec890606aa3d771adc4c395cc438c0332b
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN apt-get update && \
