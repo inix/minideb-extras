@@ -1,10 +1,13 @@
-# Stacksmith Base OS Docker images
+[![CircleCI](https://circleci.com/gh/bitnami/stacksmith-base/tree/master.svg?style=shield)](https://circleci.com/gh/bitnami/stacksmith-base/tree/master)
+
+# Stacksmith Base OS Docker image
 
 All Docker stacks generated on [Bitnami Stacksmith](https://stacksmith.bitnami.com) are built on top
-of these base images. The currently supported images are:
+this image.
 
-- [Debian](debian)
-- [Ubuntu](ubuntu)
+This base image builds on top of
+[minideb](https://github.com/bitnami/minideb) -- a minimal, Debian-derived base image.
+[Learn more](https://github.com/bitnami/minideb).
 
 # License
 
