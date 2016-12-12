@@ -106,10 +106,10 @@ check_for_image_updates() {
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
   PLATFORM=$BITNAMI_CONTAINER_PLATFORM
 
-  # CHE_API_ENDPOINT is set by Eclipse Che and Codenvy as of version 5.0.0
-  if [ -n "$CHE_API_ENDPOINT" ]; then
+  # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
+  if [ -n "$CHE_API" ]; then
     DISABLE_UPDATE_MESSAGE=1
-    if [ "$CHE_API_ENDPOINT" == "https://codenvy.io/api" ]; then
+    if [ "$CHE_API" == "https://codenvy.io/api" ]; then
       PLATFORM=${PLATFORM:-codenvy}
     else
       PLATFORM=${PLATFORM:-che}
