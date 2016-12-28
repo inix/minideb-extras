@@ -85,10 +85,12 @@ detect_platform() {
 # Checks for any updates for this Stacksmith stack
 check_for_stack_updates() {
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-stacksmith}
+  CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
+  PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert /opt/bitnami/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN" \
+    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
 
   STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
