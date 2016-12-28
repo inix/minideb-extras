@@ -1,5 +1,6 @@
 BITNAMI_PREFIX=/opt/bitnami
 UPDATE_SERVER="https://container.checkforupdates.com"
+CURL_ARGS="-sLf --connect-timeout 3"
 
 print_welcome_page() {
   if [ -n "$BITNAMI_APP_NAME" ]; then
@@ -54,14 +55,42 @@ print_stacksmith_welcome_page() {
 EndOfMessage
 }
 
+detect_cloud() {
+  local CLOUD=unknown
+  if curl $CURL_ARGS -o /dev/null http://169.254.169.254/latest/meta-data/; then
+    CLOUD=aws
+  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/0.1/meta-data/; then
+    CLOUD=gce
+  fi
+  echo $CLOUD
+}
+
+detect_platform() {
+  local PLATFORM=unknown
+  if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://169.254.169.254/latest/meta-data/hostname):51678/v1/metadata; then
+    PLATFORM=ecs
+  elif nc -z $KUBERNETES_SERVICE_HOST $KUBERNETES_SERVICE_PORT 2>/dev/null; then
+    PLATFORM=kubernetes
+  elif [ -n "$CHE_API" ]; then
+    # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
+    if [ "$CHE_API" == "https://codenvy.io/api" ]; then
+      PLATFORM=codenvy
+    else
+      PLATFORM=che
+    fi
+  fi
+  echo $PLATFORM
+}
 
 # Checks for any updates for this Stacksmith stack
 check_for_stack_updates() {
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-stacksmith}
+  CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
+  PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert /opt/bitnami/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN" \
+    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
 
   STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
@@ -78,23 +107,28 @@ check_for_stack_updates() {
   OUTDATED_MSG="Updates available"
   VULNERABLE_MSG="Your stack is vulnerable"
 
-  if [ "$STATUS" = "200" ]; then
-    COLOR="\e[0;30;42m"
-    MSG="Your stack is up to date!"
-  elif [ "$STATUS" = "201" ]; then
-    COLOR="\e[0;30;43m"
-    MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
-  elif [ "$STATUS" = "204" ]; then
-    COLOR="\e[0;30;43m"
-    MSG="$OUTDATED_MSG: $RECREATE_ACTION"
-  elif [ "$STATUS" = "426" ]; then
-    COLOR="\e[0;37;41m"
-    MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
-  elif [ "$STATUS" = "423" ]; then
-    COLOR="\e[0;37;41m"
-    MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
-  fi
-
+  case "$STATUS" in
+    200 )
+      COLOR="\e[0;30;42m"
+      MSG="Your stack is up to date!"
+      ;;
+    201 )
+      COLOR="\e[0;30;43m"
+      MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
+      ;;
+    204 )
+      COLOR="\e[0;30;43m"
+      MSG="$OUTDATED_MSG: $RECREATE_ACTION"
+      ;;
+    426 )
+      COLOR="\e[0;37;41m"
+      MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
+      ;;
+    423 )
+      COLOR="\e[0;37;41m"
+      MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
+      ;;
+  esac
   if [ "$MSG" ]; then
     printf "\n$COLOR*** $MSG ***\e[0m\n\n"
   fi
@@ -102,24 +136,17 @@ check_for_stack_updates() {
 
 # Checks for any updates for this Bitnami Docker image
 check_for_image_updates() {
-  UPDATE_SERVER="https://container.checkforupdates.com"
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
-  PLATFORM=$BITNAMI_CONTAINER_PLATFORM
+  CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
+  PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
-  # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
-  if [ -n "$CHE_API" ]; then
-    DISABLE_UPDATE_MESSAGE=1
-    if [ "$CHE_API" == "https://codenvy.io/api" ]; then
-      PLATFORM=${PLATFORM:-codenvy}
-    else
-      PLATFORM=${PLATFORM:-che}
-    fi
-  fi
-  PLATFORM=${PLATFORM:-unknown}
+  case "$PLATFORM" in
+    che|codenvy ) DISABLE_UPDATE_MESSAGE=1 ;; # disable update message displayed when running on che
+  esac
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&platform=$PLATFORM" \
+    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
 
   VERSION=$(echo $RESPONSE | cut -d '|' -f 1)
@@ -129,14 +156,16 @@ check_for_image_updates() {
 
   STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
 
-  if [ "$STATUS" = "200" ]; then
-    COLOR="\e[0;30;42m"
-    MSG="Your container is up to date!"
-  elif [ "$STATUS" = "201" ]; then
-    COLOR="\e[0;30;43m"
-    MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
-  fi
-
+  case "$STATUS" in
+    200 )
+      COLOR="\e[0;30;42m"
+      MSG="Your container is up to date!"
+      ;;
+    201 )
+      COLOR="\e[0;30;43m"
+      MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
+      ;;
+  esac
   if [ -z "$DISABLE_UPDATE_MESSAGE" -a "$MSG" ]; then
     printf "\n$COLOR*** $MSG ***\e[0m\n\n"
   fi
