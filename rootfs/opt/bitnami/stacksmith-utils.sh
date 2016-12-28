@@ -107,23 +107,28 @@ check_for_stack_updates() {
   OUTDATED_MSG="Updates available"
   VULNERABLE_MSG="Your stack is vulnerable"
 
-  if [ "$STATUS" = "200" ]; then
-    COLOR="\e[0;30;42m"
-    MSG="Your stack is up to date!"
-  elif [ "$STATUS" = "201" ]; then
-    COLOR="\e[0;30;43m"
-    MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
-  elif [ "$STATUS" = "204" ]; then
-    COLOR="\e[0;30;43m"
-    MSG="$OUTDATED_MSG: $RECREATE_ACTION"
-  elif [ "$STATUS" = "426" ]; then
-    COLOR="\e[0;37;41m"
-    MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
-  elif [ "$STATUS" = "423" ]; then
-    COLOR="\e[0;37;41m"
-    MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
-  fi
-
+  case "$STATUS" in
+    200 )
+      COLOR="\e[0;30;42m"
+      MSG="Your stack is up to date!"
+      ;;
+    201 )
+      COLOR="\e[0;30;43m"
+      MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
+      ;;
+    204 )
+      COLOR="\e[0;30;43m"
+      MSG="$OUTDATED_MSG: $RECREATE_ACTION"
+      ;;
+    426 )
+      COLOR="\e[0;37;41m"
+      MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
+      ;;
+    423 )
+      COLOR="\e[0;37;41m"
+      MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
+      ;;
+  esac
   if [ "$MSG" ]; then
     printf "\n$COLOR*** $MSG ***\e[0m\n\n"
   fi
@@ -131,7 +136,6 @@ check_for_stack_updates() {
 
 # Checks for any updates for this Bitnami Docker image
 check_for_image_updates() {
-  UPDATE_SERVER="https://container.checkforupdates.com"
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
   CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
   PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
@@ -152,14 +156,16 @@ check_for_image_updates() {
 
   STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
 
-  if [ "$STATUS" = "200" ]; then
-    COLOR="\e[0;30;42m"
-    MSG="Your container is up to date!"
-  elif [ "$STATUS" = "201" ]; then
-    COLOR="\e[0;30;43m"
-    MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
-  fi
-
+  case "$STATUS" in
+    200 )
+      COLOR="\e[0;30;42m"
+      MSG="Your container is up to date!"
+      ;;
+    201 )
+      COLOR="\e[0;30;43m"
+      MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
+      ;;
+  esac
   if [ -z "$DISABLE_UPDATE_MESSAGE" -a "$MSG" ]; then
     printf "\n$COLOR*** $MSG ***\e[0m\n\n"
   fi
