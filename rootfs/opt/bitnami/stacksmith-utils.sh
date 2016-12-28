@@ -1,5 +1,6 @@
 BITNAMI_PREFIX=/opt/bitnami
 UPDATE_SERVER="https://container.checkforupdates.com"
+CURL_ARGS="-sLf --connect-timeout 3"
 
 print_welcome_page() {
   if [ -n "$BITNAMI_APP_NAME" ]; then
@@ -52,6 +53,16 @@ print_stacksmith_welcome_page() {
   *** $MSG2 ***
 
 EndOfMessage
+}
+
+detect_cloud() {
+  local CLOUD=unknown
+  if curl $CURL_ARGS -o /dev/null http://169.254.169.254/latest/meta-data/; then
+    CLOUD=aws
+  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/0.1/meta-data/; then
+    CLOUD=gce
+  fi
+  echo $CLOUD
 }
 
 detect_platform() {
@@ -116,6 +127,7 @@ check_for_stack_updates() {
 check_for_image_updates() {
   UPDATE_SERVER="https://container.checkforupdates.com"
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
+  CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
   PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
   case "$PLATFORM" in
@@ -124,7 +136,7 @@ check_for_image_updates() {
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&platform=$PLATFORM" \
+    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
 
   VERSION=$(echo $RESPONSE | cut -d '|' -f 1)
