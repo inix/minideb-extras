@@ -54,6 +54,18 @@ print_stacksmith_welcome_page() {
 EndOfMessage
 }
 
+detect_platform() {
+  local PLATFORM=unknown
+  if [ -n "$CHE_API" ]; then
+    # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
+    if [ "$CHE_API" == "https://codenvy.io/api" ]; then
+      PLATFORM=codenvy
+    else
+      PLATFORM=che
+    fi
+  fi
+  echo $PLATFORM
+}
 
 # Checks for any updates for this Stacksmith stack
 check_for_stack_updates() {
@@ -104,18 +116,11 @@ check_for_stack_updates() {
 check_for_image_updates() {
   UPDATE_SERVER="https://container.checkforupdates.com"
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
-  PLATFORM=$BITNAMI_CONTAINER_PLATFORM
+  PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
-  # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
-  if [ -n "$CHE_API" ]; then
-    DISABLE_UPDATE_MESSAGE=1
-    if [ "$CHE_API" == "https://codenvy.io/api" ]; then
-      PLATFORM=${PLATFORM:-codenvy}
-    else
-      PLATFORM=${PLATFORM:-che}
-    fi
-  fi
-  PLATFORM=${PLATFORM:-unknown}
+  case "$PLATFORM" in
+    che|codenvy ) DISABLE_UPDATE_MESSAGE=1 ;; # disable update message displayed when running on che
+  esac
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
