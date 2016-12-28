@@ -69,6 +69,8 @@ detect_platform() {
   local PLATFORM=unknown
   if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://169.254.169.254/latest/meta-data/hostname):51678/v1/metadata; then
     PLATFORM=ecs
+  elif nc -z $KUBERNETES_SERVICE_HOST $KUBERNETES_SERVICE_PORT 2>/dev/null; then
+    PLATFORM=kubernetes
   elif [ -n "$CHE_API" ]; then
     # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
     if [ "$CHE_API" == "https://codenvy.io/api" ]; then
