@@ -61,6 +61,8 @@ detect_cloud() {
     CLOUD=aws
   elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/0.1/meta-data/; then
     CLOUD=gce
+  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/InstanceInfo; then
+    CLOUD=azure
   fi
   echo $CLOUD
 }
