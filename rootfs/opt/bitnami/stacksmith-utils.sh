@@ -1,6 +1,6 @@
 BITNAMI_PREFIX=/opt/bitnami
 UPDATE_SERVER="https://container.checkforupdates.com"
-CURL_ARGS="-sLf --connect-timeout 3"
+CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
 
 print_welcome_page() {
   if [ -n "$BITNAMI_APP_NAME" ]; then
@@ -57,19 +57,23 @@ EndOfMessage
 
 detect_cloud() {
   local CLOUD=unknown
-  if curl $CURL_ARGS -o /dev/null http://169.254.169.254/latest/meta-data/; then
+  if curl $CURL_ARGS -o /dev/null http://instance-data/latest/meta-data/; then
     CLOUD=aws
-  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/0.1/meta-data/; then
-    CLOUD=gce
+  elif curl $CURL_ARGS -o /dev/null http://metadata.google.internal/0.1/meta-data/; then
+    CLOUD=google
+  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/InstanceInfo; then
+    CLOUD=azure
+  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/vendor-data; then
+    CLOUD=do
   fi
   echo $CLOUD
 }
 
 detect_platform() {
   local PLATFORM=unknown
-  if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://169.254.169.254/latest/meta-data/hostname):51678/v1/metadata; then
+  if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://instance-data/latest/meta-data/hostname):51678/v1/metadata; then
     PLATFORM=ecs
-  elif nc -z $KUBERNETES_SERVICE_HOST $KUBERNETES_SERVICE_PORT 2>/dev/null; then
+  elif [ -f /var/run/secrets/kubernetes.io/serviceaccount/namespace ]; then
     PLATFORM=kubernetes
   elif [ -n "$CHE_API" ]; then
     # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
