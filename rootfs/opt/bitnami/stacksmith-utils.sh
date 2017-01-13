@@ -60,7 +60,7 @@ detect_cloud() {
   if curl $CURL_ARGS -o /dev/null http://instance-data/latest/meta-data/; then
     CLOUD=aws
   elif curl $CURL_ARGS -o /dev/null http://metadata.google.internal/0.1/meta-data/; then
-    CLOUD=gce
+    CLOUD=google
   elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/InstanceInfo; then
     CLOUD=azure
   elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/vendor-data; then
