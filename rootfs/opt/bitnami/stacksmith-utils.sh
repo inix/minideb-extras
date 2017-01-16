@@ -3,10 +3,12 @@ UPDATE_SERVER="https://container.checkforupdates.com"
 CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
 
 print_welcome_page() {
-  if [ -n "$BITNAMI_APP_NAME" ]; then
-    print_image_welcome_page
-  elif [ -n "$STACKSMITH_STACK_ID" ]; then
-    print_stacksmith_welcome_page
+  if [ -z "$DISABLE_WELCOME_MESSAGE" ]; then
+    if [ -n "$BITNAMI_APP_NAME" ]; then
+      print_image_welcome_page
+    elif [ -n "$STACKSMITH_STACK_ID" ]; then
+      print_stacksmith_welcome_page
+    fi
   fi
 }
 
@@ -23,7 +25,7 @@ check_for_updates() {
 # Prints the welcome page for this Bitnami Docker image
 print_image_welcome_page() {
   GITHUB_PAGE=https://github.com/bitnami/bitnami-docker-${BITNAMI_APP_NAME}
-cat << EndOfMessage
+cat >&2 << EndOfMessage
 
   *** Welcome to the ${BITNAMI_APP_NAME} image ***
   *** Brought to you by Bitnami ***
@@ -45,7 +47,7 @@ print_stacksmith_welcome_page() {
     MSG2="Sign up for a free account at $STACKSMITH_URL to manage and regenerate your stacks."
   fi
 
-  cat << EndOfMessage
+  cat >&2 << EndOfMessage
 
   *** Welcome to your $STACKSMITH_STACK_NAME container! ***
   *** Brought to you by Bitnami. ***
@@ -134,7 +136,7 @@ check_for_stack_updates() {
       ;;
   esac
   if [ "$MSG" ]; then
-    printf "\n$COLOR*** $MSG ***\e[0m\n\n"
+    printf "\n$COLOR*** $MSG ***\e[0m\n\n" >&2
   fi
 }
 
@@ -171,6 +173,6 @@ check_for_image_updates() {
       ;;
   esac
   if [ -z "$DISABLE_UPDATE_MESSAGE" -a "$MSG" ]; then
-    printf "\n$COLOR*** $MSG ***\e[0m\n\n"
+    printf "\n$COLOR*** $MSG ***\e[0m\n\n" >&2
   fi
 }
