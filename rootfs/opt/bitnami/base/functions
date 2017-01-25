@@ -4,6 +4,10 @@ BITNAMI_PREFIX=/opt/bitnami
 UPDATE_SERVER="https://container.checkforupdates.com"
 CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
 
+log() {
+  echo -e "${@}" >&2
+}
+
 print_welcome_page() {
   if [ -z "$DISABLE_WELCOME_MESSAGE" ]; then
     if [ -n "$BITNAMI_APP_NAME" ]; then
