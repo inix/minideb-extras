@@ -1,7 +1,6 @@
 #!/bin/bash
 . /opt/bitnami/base/functions
 
-
 ##
 ## @brief      Helper function to initialize a nami module
 ## param $1 module name
