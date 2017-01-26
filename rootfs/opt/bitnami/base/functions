@@ -31,6 +31,18 @@ log() {
   echo -e "${@}" >&2
 }
 
+info() {
+  log "${GREEN}INFO ${RESET} ==> ${@}"
+}
+
+warn() {
+  log "${YELLOW}WARN ${RESET} ==> ${@}"
+}
+
+error() {
+  log "${RED}ERROR${RESET} ==> ${@}"
+}
+
 print_welcome_page() {
   if [ -z "$DISABLE_WELCOME_MESSAGE" ]; then
     if [ -n "$BITNAMI_APP_NAME" ]; then
