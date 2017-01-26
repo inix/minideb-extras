@@ -28,7 +28,7 @@ ON_CYAN='\033[48;5;6m'
 ON_WHITE='\033[48;5;7m'
 
 log() {
-  echo -e "${@}" >&2
+  echo -e "${DEBUG:+${MAGENTA}$(date "+%H:%M:%S ")}${RESET}${@}" >&2
 }
 
 info() {
