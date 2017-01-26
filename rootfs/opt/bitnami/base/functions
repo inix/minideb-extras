@@ -142,7 +142,7 @@ check_for_stack_updates() {
       ;;
   esac
   if [ "$MSG" ]; then
-    printf "\n$COLOR*** $MSG ***\e[0m\n\n" >&2
+    log "\n$COLOR*** $MSG ***\e[0m\n"
   fi
 }
 
@@ -179,6 +179,6 @@ check_for_image_updates() {
       ;;
   esac
   if [ -z "$DISABLE_UPDATE_MESSAGE" -a "$MSG" ]; then
-    printf "\n$COLOR*** $MSG ***\e[0m\n\n" >&2
+    log "\n$COLOR*** $MSG ***\e[0m\n"
   fi
 }
