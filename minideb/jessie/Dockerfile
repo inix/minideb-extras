@@ -26,11 +26,11 @@ ENV TINI_VERSION v0.9.0
 
 RUN cd /tmp && \
   gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 && \
-  curl -sSLO https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini && \
-  curl -sSLO https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini.asc && \
-  gpg --verify tini.asc && \
-  chmod +x tini && \
-  mv tini /usr/local/bin/ && \
+  gpg --fingerprint 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 | grep -q "Key fingerprint = 6380 DC42 8747 F6C3 93FE  ACA5 9A84 159D 7001 A4E5" && \
+  curl -sSL https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini.asc -o tini.asc && \
+  curl -sSL https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini -o /usr/local/bin/tini && \
+  gpg --verify tini.asc /usr/local/bin/tini && \
+  chmod +x /usr/local/bin/tini && \
   rm tini.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
