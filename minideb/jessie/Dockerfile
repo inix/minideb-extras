@@ -22,7 +22,7 @@ RUN cd /tmp && \
   tar xzf nami-$NAMI_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/nami && \
   rm nami-$NAMI_VERSION-linux-x64.tar.gz
 
-ENV TINI_VERSION v0.9.0
+ENV TINI_VERSION v0.13.2
 
 RUN cd /tmp && \
   gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 && \
