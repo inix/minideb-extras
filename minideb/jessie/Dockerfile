@@ -25,9 +25,9 @@ RUN cd /tmp && \
 ENV TINI_VERSION v0.9.0
 
 RUN cd /tmp && \
+  gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 && \
   curl -sSLO https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini && \
   curl -sSLO https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini.asc && \
-  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 && \
   gpg --verify tini.asc && \
   chmod +x tini && \
   mv tini /usr/local/bin/ && \
