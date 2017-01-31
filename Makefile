@@ -13,8 +13,11 @@ build:
 		revision=$$(cat $$distro/$$release/REVISION) ; \
 		if [ $(DEV_BUILD) ]; then revision=DEV; fi ; \
 		docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision -f $$distro/$$release/Dockerfile . && \
-		echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision\n$$(cat $$distro/$$release/buildpack/Dockerfile)" | \
-		docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release-r$$revision - ; \
+		echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision\n$$(cat $$distro/$$release/buildpack/Dockerfile)" | docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release-r$$revision - ; \
+		if [ "$$revision" != "DEV" ]; then \
+			docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release -f $$distro/$$release/Dockerfile . && \
+			echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release\n$$(cat $$distro/$$release/buildpack/Dockerfile)" | docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release - ; \
+		fi ; \
 	done
 
 push: build
@@ -28,5 +31,9 @@ push: build
 			if [ $(DEV_BUILD) ]; then revision=DEV; fi ; \
 			gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision ; \
 			gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release-r$$revision ; \
+			if [ "$$revision" != "DEV" ]; then \
+				gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release ; \
+				gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release ; \
+			fi ; \
 		done ; \
 	fi
