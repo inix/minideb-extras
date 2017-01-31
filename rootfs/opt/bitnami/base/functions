@@ -30,7 +30,7 @@ ON_WHITE='\033[48;5;7m'
 MODULE="$(basename $0)"
 
 log() {
-  echo -e "${DEBUG:+${CYAN}${MODULE} ${MAGENTA}$(date "+%T.%2N ")}${RESET}${@}" >&2
+  echo -e "${NAMI_DEBUG:+${CYAN}${MODULE} ${MAGENTA}$(date "+%T.%2N ")}${RESET}${@}" >&2
 }
 
 info() {

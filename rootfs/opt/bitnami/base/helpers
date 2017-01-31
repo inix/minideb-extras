@@ -7,7 +7,7 @@
 ##
 ## Initialize an unpacked nami module with the `nami initialize` command.
 ## Command arguments can be specified as function argumnts after the module name.
-## `--log-level trace` flag is added to the command if `DEBUG` env variable exists.
+## `--log-level trace` flag is added to the command if `NAMI_DEBUG` env variable exists.
 ## The log level can be overriden using the `LOG_LEVEL` env variable.
 ##
 nami_initialize_one() {
@@ -17,7 +17,7 @@ nami_initialize_one() {
     if [[ -f /${module}-inputs.json ]]; then
       inputs=--inputs-file=/${module}-inputs.json
     fi
-    nami ${DEBUG:+--log-level ${LOG_LEVEL:-trace}} initialize ${module} $inputs "${@:2}"
+    nami ${NAMI_DEBUG:+--log-level ${LOG_LEVEL:-trace}} initialize ${module} $inputs "${@:2}"
   fi
 }
 

@@ -29,13 +29,13 @@ The following tables lists the configurable parameters of the image.
 
 |         Parameter         |                                                Description                                                 |
 |---------------------------|------------------------------------------------------------------------------------------------------------|
-| `DEBUG`                   | [Turn on debugging](#enabling-debugging)                                                                   |
+| `NAMI_DEBUG`              | [Turn on debugging](#enabling-debugging)                                                                   |
 | `DISABLE_WELCOME_MESSAGE` | [Turn off the welcome text](#turning-off-the-welcome-text)                                                 |
 | `DISABLE_LAUNCH_TRACKING` | [Turn off update notifications and launch tracking](#turning-off-update-notifications-and-launch-tracking) |
 
 ### Enabling debugging
 
-To enable debugging add `DEBUG=1` to the container environment. The `DEBUG` variable enables helpful logging and debugging features which can be valuable for debugging issues.
+To enable debugging add `NAMI_DEBUG=1` to the container environment. The `NAMI_DEBUG` variable enables helpful logging and debugging features which can be valuable for debugging issues.
 
 ### Turning off the welcome text
 
