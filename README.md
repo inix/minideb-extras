@@ -55,7 +55,7 @@ To enable debugging add `NAMI_DEBUG=1` to the container environment. The `NAMI_D
 
 ### Turn off the welcome text
 
-When a new container is launched, the entrypoint will display a welcome message as illustrated below:
+When a new container is launched, a welcome message is displayed as illustrated below:
 
 ```console
  *** Welcome to the apache image ***
