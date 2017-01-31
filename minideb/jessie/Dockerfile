@@ -1,17 +1,14 @@
 FROM bitnami/minideb@sha256:246fe051851f2288980add737d8159e4d2541c414497f829904c61a76ed87f15
 MAINTAINER Bitnami <containers@bitnami.com>
 
-RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl ca-certificates cron sudo locales procps libaio1 libssl1.0.0 netcat-traditional && \
+RUN install_packages curl ca-certificates cron sudo locales procps libaio1 libssl1.0.0 netcat-traditional && \
   useradd -ms /bin/bash bitnami && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
   echo "bitnami ALL=NOPASSWD: ALL" >> /etc/sudoers && \
   update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
   locale-gen en_US.UTF-8 && \
-  DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
-  apt-get clean && \
-  rm -rf /var/lib/apt /var/cache/apt/archives/* /tmp/*
+  DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 
 ENV NAMI_VERSION 0.0.6-0
 
