@@ -45,11 +45,16 @@ The following tables lists the configurable parameters of the image.
 
 |         Parameter         |                                               Description                                               |
 |---------------------------|---------------------------------------------------------------------------------------------------------|
-| `NAMI_DEBUG`              | [Turn on debugging](#turn-on-debugging)                                                                 |
+| `BASH_DEBUG`              | [Turn on bash debugging](#turn-on-bash-debugging)                                                       |
+| `NAMI_DEBUG`              | [Turn on nami debugging](#turn-on-nami-debugging)                                                       |
 | `DISABLE_WELCOME_MESSAGE` | [Turn off the welcome text](#turn-off-the-welcome-text)                                                 |
 | `DISABLE_LAUNCH_TRACKING` | [Turn off update notifications and launch tracking](#turn-off-update-notifications-and-launch-tracking) |
 
-### Turn on debugging
+### Turn on BASH debugging
+
+Add `BASH_DEBUG=1` to the container environment to enable [BASH debugging](http://wiki.bash-hackers.org/scripting/debuggingtips#use_shell_debug_output) which prints the commands being executed.
+
+### Turn on Nami debugging
 
 To enable debugging add `NAMI_DEBUG=1` to the container environment. The `NAMI_DEBUG` variable enables helpful logging and debugging features which can be valuable for debugging issues.
 

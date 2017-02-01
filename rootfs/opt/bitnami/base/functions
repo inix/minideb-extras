@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[[ $BASH_DEBUG ]] && set -x
+
 BITNAMI_PREFIX=/opt/bitnami
 UPDATE_SERVER="https://container.checkforupdates.com"
 CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
