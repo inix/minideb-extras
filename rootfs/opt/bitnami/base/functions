@@ -1,6 +1,49 @@
+#!/bin/bash
+
 BITNAMI_PREFIX=/opt/bitnami
 UPDATE_SERVER="https://container.checkforupdates.com"
 CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
+
+# Color Palette
+RESET='\033[0m'
+
+## Foreground
+BLACK='\033[38;5;0m'
+RED='\033[38;5;1m'
+GREEN='\033[38;5;2m'
+YELLOW='\033[38;5;3m'
+BLUE='\033[38;5;4m'
+MAGENTA='\033[38;5;5m'
+CYAN='\033[38;5;6m'
+WHITE='\033[38;5;7m'
+
+## Background
+ON_BLACK='\033[48;5;0m'
+ON_RED='\033[48;5;1m'
+ON_GREEN='\033[48;5;2m'
+ON_YELLOW='\033[48;5;3m'
+ON_BLUE='\033[48;5;4m'
+ON_MAGENTA='\033[48;5;5m'
+ON_CYAN='\033[48;5;6m'
+ON_WHITE='\033[48;5;7m'
+
+MODULE="$(basename $0)"
+
+log() {
+  echo -e "${NAMI_DEBUG:+${CYAN}${MODULE} ${MAGENTA}$(date "+%T.%2N ")}${RESET}${@}" >&2
+}
+
+info() {
+  log "${GREEN}INFO ${RESET} ==> ${@}"
+}
+
+warn() {
+  log "${YELLOW}WARN ${RESET} ==> ${@}"
+}
+
+error() {
+  log "${RED}ERROR${RESET} ==> ${@}"
+}
 
 print_welcome_page() {
   if [ -z "$DISABLE_WELCOME_MESSAGE" ]; then
@@ -13,7 +56,7 @@ print_welcome_page() {
 }
 
 check_for_updates() {
-  if [ -z "$DISABLE_UPDATE_CHECK" ]; then
+  if [ -z "$DISABLE_LAUNCH_TRACKING" ]; then
     if [ -n "$BITNAMI_APP_NAME" ]; then
       check_for_image_updates
     elif [ -n "$STACKSMITH_STACK_ID" ]; then
@@ -25,14 +68,13 @@ check_for_updates() {
 # Prints the welcome page for this Bitnami Docker image
 print_image_welcome_page() {
   GITHUB_PAGE=https://github.com/bitnami/bitnami-docker-${BITNAMI_APP_NAME}
-cat >&2 << EndOfMessage
 
-  *** Welcome to the ${BITNAMI_APP_NAME} image ***
-  *** Brought to you by Bitnami ***
-  *** More information: ${GITHUB_PAGE} ***
-  *** Issues: ${GITHUB_PAGE}/issues ***
-
-EndOfMessage
+  log
+  log " *** Welcome to the ${BITNAMI_APP_NAME} image ***"
+  log " *** Brought to you by Bitnami ***"
+  log " *** More information: ${GITHUB_PAGE} ***"
+  log " *** Issues: ${GITHUB_PAGE}/issues ***"
+  log
 }
 
 # Prints the welcome page for this Stacksmith stack
@@ -47,14 +89,12 @@ print_stacksmith_welcome_page() {
     MSG2="Sign up for a free account at $STACKSMITH_URL to manage and regenerate your stacks."
   fi
 
-  cat >&2 << EndOfMessage
-
-  *** Welcome to your $STACKSMITH_STACK_NAME container! ***
-  *** Brought to you by Bitnami. ***
-  *** $MSG1 ***
-  *** $MSG2 ***
-
-EndOfMessage
+  log
+  log " *** Welcome to your $STACKSMITH_STACK_NAME container! ***"
+  log " *** Brought to you by Bitnami. ***"
+  log " *** $MSG1 ***"
+  log " *** $MSG2 ***"
+  log
 }
 
 detect_cloud() {
@@ -99,44 +139,47 @@ check_for_stack_updates() {
     "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
 
-  STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
+  if [ -z "$DISABLE_UPDATE_MESSAGE" ]; then
+    STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
 
-  ACTION="go to https://stacksmith.bitnami.com/dashboard/stacks/"
-  REGENERATE_ACTION="$ACTION$STACKSMITH_STACK_ID to regenerate"
-  RECREATE_ACTION="${ACTION}new to create a new stack"
+    ACTION="go to https://stacksmith.bitnami.com/dashboard/stacks/"
+    REGENERATE_ACTION="$ACTION$STACKSMITH_STACK_ID to regenerate"
+    RECREATE_ACTION="${ACTION}new to create a new stack"
 
-  if [ -z "$STACKSMITH_STACK_PRIVATE" ]; then
-    # Can't regenerate if it's an anonymous stack
-    REGENERATE_ACTION=$RECREATE_ACTION
-  fi
+    if [ -z "$STACKSMITH_STACK_PRIVATE" ]; then
+      # Can't regenerate if it's an anonymous stack
+      REGENERATE_ACTION=$RECREATE_ACTION
+    fi
 
-  OUTDATED_MSG="Updates available"
-  VULNERABLE_MSG="Your stack is vulnerable"
+    OUTDATED_MSG="Updates available"
+    VULNERABLE_MSG="Your stack is vulnerable"
 
-  case "$STATUS" in
-    200 )
-      COLOR="\e[0;30;42m"
-      MSG="Your stack is up to date!"
-      ;;
-    201 )
-      COLOR="\e[0;30;43m"
-      MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
-      ;;
-    204 )
-      COLOR="\e[0;30;43m"
-      MSG="$OUTDATED_MSG: $RECREATE_ACTION"
-      ;;
-    426 )
-      COLOR="\e[0;37;41m"
-      MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
-      ;;
-    423 )
-      COLOR="\e[0;37;41m"
-      MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
-      ;;
-  esac
-  if [ "$MSG" ]; then
-    printf "\n$COLOR*** $MSG ***\e[0m\n\n" >&2
+    case "$STATUS" in
+      200 )
+        FORMAT="${BLACK}${ON_GREEN}"
+        MSG="Your stack is up to date!"
+        ;;
+      201 )
+        FORMAT="${BLACK}${ON_YELLOW}"
+        MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
+        ;;
+      204 )
+        FORMAT="${BLACK}${ON_YELLOW}"
+        MSG="$OUTDATED_MSG: $RECREATE_ACTION"
+        ;;
+      426 )
+        FORMAT="${WHITE}${ON_RED}"
+        MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
+        ;;
+      423 )
+        FORMAT="${WHITE}${ON_RED}"
+        MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
+        ;;
+    esac
+
+    if [ "$MSG" ]; then
+      log "\n${FORMAT}*** ${MSG} ***${RESET}\n"
+    fi
   fi
 }
 
@@ -155,24 +198,27 @@ check_for_image_updates() {
     "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
 
-  VERSION=$(echo $RESPONSE | cut -d '|' -f 1)
-  if [[ ! $VERSION =~ [0-9.-] ]]; then
-    return
-  fi
+  if [ -z "$DISABLE_UPDATE_MESSAGE" ]; then
+    VERSION=$(echo $RESPONSE | cut -d '|' -f 1)
+    if [[ ! $VERSION =~ [0-9.-] ]]; then
+      return
+    fi
 
-  STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
+    STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
 
-  case "$STATUS" in
-    200 )
-      COLOR="\e[0;30;42m"
-      MSG="Your container is up to date!"
-      ;;
-    201 )
-      COLOR="\e[0;30;43m"
-      MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
-      ;;
-  esac
-  if [ -z "$DISABLE_UPDATE_MESSAGE" -a "$MSG" ]; then
-    printf "\n$COLOR*** $MSG ***\e[0m\n\n" >&2
+    case "$STATUS" in
+      200 )
+        FORMAT="${BLACK}${ON_GREEN}"
+        MSG="Your container is up to date!"
+        ;;
+      201 )
+        FORMAT="${BLACK}${ON_YELLOW}"
+        MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
+        ;;
+    esac
+
+    if [ -n "$MSG" ]; then
+      log "\n${FORMAT}*** ${MSG} ***${RESET}\n"
+    fi
   fi
 }
