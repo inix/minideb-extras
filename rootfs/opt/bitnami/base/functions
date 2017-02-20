@@ -8,6 +8,7 @@ CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
 
 # Color Palette
 RESET='\033[0m'
+BOLD='\033[1m'
 
 ## Foreground
 BLACK='\033[38;5;0m'
@@ -71,12 +72,12 @@ check_for_updates() {
 print_image_welcome_page() {
   GITHUB_PAGE=https://github.com/bitnami/bitnami-docker-${BITNAMI_APP_NAME}
 
-  log
-  log " *** Welcome to the ${BITNAMI_APP_NAME} image ***"
-  log " *** Brought to you by Bitnami ***"
-  log " *** More information: ${GITHUB_PAGE} ***"
-  log " *** Issues: ${GITHUB_PAGE}/issues ***"
-  log
+  log ""
+  log "${BOLD}Welcome to the Bitnami ${BITNAMI_APP_NAME} container${RESET}"
+  log "Subscribe to project updates by watching ${BOLD}https://github.com/bitnami/bitnami-docker-mariadb${RESET}"
+  log "If you need technical support, please visit ${BOLD}https://github.com/bitnami/bitnami-docker-mariadb/issues${RESET}"
+  log "Send us your feedback at ${BOLD}containers@bitnami.com${RESET}"
+  log ""
 }
 
 # Prints the welcome page for this Stacksmith stack
@@ -91,12 +92,12 @@ print_stacksmith_welcome_page() {
     MSG2="Sign up for a free account at $STACKSMITH_URL to manage and regenerate your stacks."
   fi
 
-  log
-  log " *** Welcome to your $STACKSMITH_STACK_NAME container! ***"
-  log " *** Brought to you by Bitnami. ***"
-  log " *** $MSG1 ***"
-  log " *** $MSG2 ***"
-  log
+  log ""
+  log "${BOLD}Welcome to your $STACKSMITH_STACK_NAME container!${RESET}"
+  log "Brought to you by Bitnami."
+  log "$MSG1"
+  log "$MSG2"
+  log ""
 }
 
 detect_cloud() {
