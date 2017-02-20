@@ -140,49 +140,6 @@ check_for_stack_updates() {
     --cacert /opt/bitnami/updates-ca-cert.pem \
     "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
-
-  if [ -z "$DISABLE_UPDATE_MESSAGE" ]; then
-    STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
-
-    ACTION="go to https://stacksmith.bitnami.com/dashboard/stacks/"
-    REGENERATE_ACTION="$ACTION$STACKSMITH_STACK_ID to regenerate"
-    RECREATE_ACTION="${ACTION}new to create a new stack"
-
-    if [ -z "$STACKSMITH_STACK_PRIVATE" ]; then
-      # Can't regenerate if it's an anonymous stack
-      REGENERATE_ACTION=$RECREATE_ACTION
-    fi
-
-    OUTDATED_MSG="Updates available"
-    VULNERABLE_MSG="Your stack is vulnerable"
-
-    case "$STATUS" in
-      200 )
-        FORMAT="${BLACK}${ON_GREEN}"
-        MSG="Your stack is up to date!"
-        ;;
-      201 )
-        FORMAT="${BLACK}${ON_YELLOW}"
-        MSG="$OUTDATED_MSG: $REGENERATE_ACTION"
-        ;;
-      204 )
-        FORMAT="${BLACK}${ON_YELLOW}"
-        MSG="$OUTDATED_MSG: $RECREATE_ACTION"
-        ;;
-      426 )
-        FORMAT="${WHITE}${ON_RED}"
-        MSG="$VULNERABLE_MSG: $REGENERATE_ACTION"
-        ;;
-      423 )
-        FORMAT="${WHITE}${ON_RED}"
-        MSG="$VULNERABLE_MSG: $RECREATE_ACTION"
-        ;;
-    esac
-
-    if [ "$MSG" ]; then
-      log "\n${FORMAT}*** ${MSG} ***${RESET}\n"
-    fi
-  fi
 }
 
 # Checks for any updates for this Bitnami Docker image
@@ -191,36 +148,8 @@ check_for_image_updates() {
   CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
   PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
-  case "$PLATFORM" in
-    che|codenvy ) DISABLE_UPDATE_MESSAGE=1 ;; # disable update message displayed when running on che
-  esac
-
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
     "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
     -w "|%{http_code}")
-
-  if [ -z "$DISABLE_UPDATE_MESSAGE" ]; then
-    VERSION=$(echo $RESPONSE | cut -d '|' -f 1)
-    if [[ ! $VERSION =~ [0-9.-] ]]; then
-      return
-    fi
-
-    STATUS=$(echo $RESPONSE | cut -d '|' -f 2)
-
-    case "$STATUS" in
-      200 )
-        FORMAT="${BLACK}${ON_GREEN}"
-        MSG="Your container is up to date!"
-        ;;
-      201 )
-        FORMAT="${BLACK}${ON_YELLOW}"
-        MSG="New version available: run docker pull bitnami/$BITNAMI_APP_NAME:$VERSION to update."
-        ;;
-    esac
-
-    if [ -n "$MSG" ]; then
-      log "\n${FORMAT}*** ${MSG} ***${RESET}\n"
-    fi
-  fi
 }

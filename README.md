@@ -43,12 +43,12 @@ CMD ["nami", "start", "--foreground", "apache"]
 
 The following tables lists the configurable parameters of the image.
 
-|         Parameter         |                                               Description                                               |
-|---------------------------|---------------------------------------------------------------------------------------------------------|
-| `BASH_DEBUG`              | [Turn on bash debugging](#turn-on-bash-debugging)                                                       |
-| `NAMI_DEBUG`              | [Turn on nami debugging](#turn-on-nami-debugging)                                                       |
-| `DISABLE_WELCOME_MESSAGE` | [Turn off the welcome text](#turn-off-the-welcome-text)                                                 |
-| `DISABLE_LAUNCH_TRACKING` | [Turn off update notifications and launch tracking](#turn-off-update-notifications-and-launch-tracking) |
+|         Parameter         |                                  Description                                   |
+|---------------------------|--------------------------------------------------------------------------------|
+| `BASH_DEBUG`              | [Turn on bash debugging](#turn-on-bash-debugging)                              |
+| `NAMI_DEBUG`              | [Turn on nami debugging](#turn-on-nami-debugging)                              |
+| `DISABLE_WELCOME_MESSAGE` | [Turn off the welcome text](#turn-off-the-welcome-text)                        |
+| `DISABLE_LAUNCH_TRACKING` | [Turn off update notifications and launch tracking](#turn-off-launch-tracking) |
 
 ### Turn on BASH debugging
 
@@ -71,11 +71,9 @@ When a new container is launched, a welcome message is displayed as illustrated 
 
 Adding `DISABLE_WELCOME_MESSAGE=1` to the container environment turns off this message.
 
-### Turn off update notifications and launch tracking
+### Turn off launch tracking
 
-Like all Bitnami offerings, our container images are kept up-to-date and secure and we want users to be notified when new updates are available.
-
-When a container is launched, it contacts the Bitnami update notification service to check for updates. Bitnami tracks container launch data while performing this check. This helps us understand which apps are popular and prioritize app development.
+Bitnami tracks container launch data to help us understand which apps are popular and prioritize app development.
 
 The launch data collected includes:
 
@@ -84,7 +82,7 @@ The launch data collected includes:
   - Platform (Kubernetes, etc.)
   - Cloud (GCE, AWS, etc.)
 
-Update notifications and launch tracking are enabled by default. You can turn these off by adding `DISABLE_LAUNCH_TRACKING=1` to the container environment.
+Container launch tracking is enabled by default and can be turned off by adding `DISABLE_LAUNCH_TRACKING=1` to the container environment.
 
 ## Contributing
 
