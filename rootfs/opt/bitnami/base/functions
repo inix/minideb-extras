@@ -48,6 +48,15 @@ error() {
   log "${RED}ERROR${RESET} ==> ${@}"
 }
 
+empty_password_error() {
+  error "The provided input $1 is empty. You can disable this check by setting the development ALLOW_EMPTY_PASSWORD=yes flag."
+  exit 1
+}
+
+empty_password_enabled_warn() {
+  warn "You enabled the ALLOW_EMPTY_PASSWORD flag. For safety reasons, do not use this flag in a production environment"
+}
+
 print_welcome_page() {
   if [ -z "$DISABLE_WELCOME_MESSAGE" ]; then
     if [ -n "$BITNAMI_APP_NAME" ]; then
