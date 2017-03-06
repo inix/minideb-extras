@@ -10,13 +10,13 @@ build:
 	@for f in $(IMAGE_FLAVORS); do \
 		distro=$$(echo "$$f" | cut -d'/' -f1) ; \
 		release=$$(echo "$$f" | cut -d'/' -f2) ; \
-		revision=$$(cat $$distro/$$release/REVISION) ; \
+		revision=$$(cat $$release/REVISION) ; \
 		if [ $(DEV_BUILD) ]; then revision=DEV; fi ; \
-		docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision -f $$distro/$$release/Dockerfile . && \
-		echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision\n$$(cat $$distro/$$release/buildpack/Dockerfile)" | docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release-r$$revision - ; \
+		docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision -f $$release/Dockerfile . && \
+		echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision\n$$(cat $$release/buildpack/Dockerfile)" | docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release-r$$revision - ; \
 		if [ "$$revision" != "DEV" ]; then \
-			docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release -f $$distro/$$release/Dockerfile . && \
-			echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release\n$$(cat $$distro/$$release/buildpack/Dockerfile)" | docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release - ; \
+			docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release -f $$release/Dockerfile . && \
+			echo "FROM gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release\n$$(cat $$release/buildpack/Dockerfile)" | docker build --rm=false -t gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release - ; \
 		fi ; \
 	done
 
@@ -27,7 +27,7 @@ push: build
 		for f in $(IMAGE_FLAVORS); do \
 			distro=$$(echo "$$f" | cut -d'/' -f1) ; \
 			release=$$(echo "$$f" | cut -d'/' -f2) ; \
-			revision=$$(cat $$distro/$$release/REVISION) ; \
+			revision=$$(cat $$release/REVISION) ; \
 			if [ $(DEV_BUILD) ]; then revision=DEV; fi ; \
 			gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/$$distro:$$release-r$$revision ; \
 			gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/$$distro-buildpack:$$release-r$$revision ; \
