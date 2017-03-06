@@ -35,7 +35,7 @@ do
       # register flavor with stacksmith
       if [[ -n $STACKSMITH_API_KEY ]]; then
         release_notes=$(git log -1 --pretty=%b | cat | awk 1 ORS='\\n')
-        curl "https://stacksmith.bitnami.com/api/v1/components/$$DISTRO/versions?api_key=$STACKSMITH_API_KEY" \
+        curl "https://stacksmith.bitnami.com/api/v1/components/$DISTRO/versions?api_key=$STACKSMITH_API_KEY" \
           -H 'Content-Type: application/json' \
           --data '{"version": "'"${Releases[$flavor]}"'", "name": "'"$flavor"'", "revision": "'"$revision"'", "published": true, "release_notes": "'"$release_notes"'", "release_notes_url": "https://github.com/bitnami/stacksmith-base/releases"}'
       fi
