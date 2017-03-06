@@ -13,14 +13,14 @@ dependencies:
 
 test:
   override:
-  - make ${CIRCLE_TAG:+IMAGE_FLAVORS=${CIRCLE_TAG%-*}} DEV_BUILD=1 build
+  - make ${CIRCLE_TAG:+FLAVORS=$(echo ${CIRCLE_TAG#*/} | cut -d'-' -f1)} DEV_BUILD=1 build
 
 deployment:
   development:
     branch: master
     commands:
-    - make GCLOUD_SERVICE_KEY=$GCLOUD_SERVICE_KEY DEV_BUILD=1 push
+    - make DEV_BUILD=1 push
   release:
     tag: /.*/
     commands:
-    - make GCLOUD_SERVICE_KEY=$GCLOUD_SERVICE_KEY STACKSMITH_API_KEY=$STACKSMITH_API_KEY IMAGE_FLAVORS=${CIRCLE_TAG%-*} push
+    - make FLAVORS=$(echo ${CIRCLE_TAG#*/} | cut -d'-' -f1) push

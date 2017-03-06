@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+DISTRO=${DISTRO:-minideb}
+FLAVORS=${FLAVORS:-jessie}
+GCLOUD_PROJECT=${GCLOUD_PROJECT:-stacksmith-images}
+GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY:-}
+
+if [[ -n $GCLOUD_SERVICE_KEY ]]; then
+  echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
+  gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+fi
+
+for flavor in $FLAVORS
+do
+  revision=$(cat $flavor/REVISION)
+  if [[ $DEV_BUILD ]]; then
+    revision=DEV
+  fi
+
+  if [[ -n $GCLOUD_SERVICE_KEY ]]; then
+    gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$DISTRO:$flavor-r$revision
+    gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$DISTRO-buildpack:$flavor-r$revision
+
+    # push rolling tag
+    if [[ $revision != "DEV" ]]; then \
+      gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$DISTRO:$flavor
+      gcloud docker -- push gcr.io/$GCLOUD_PROJECT/$DISTRO-buildpack:$flavor
+
+      # register flavor with stacksmith
+      if [[ -n $STACKSMITH_API_KEY ]]; then
+        export jessie_version=8.6
+        sm_version=$(printenv ${flavor}_version)
+        release_notes=$(git log -1 --pretty=%b | cat | awk 1 ORS='\\n')
+
+        curl "https://stacksmith.bitnami.com/api/v1/components/$$DISTRO/versions?api_key=$(STACKSMITH_API_KEY)" \
+          -H 'Content-Type: application/json' \
+          --data '{"version": "'"$sm_version"'", "name": "'"$flavor"'", "revision": "'"$revision"'", "published": true, "release_notes": "'"$release_notes"'", "release_notes_url": "https://github.com/bitnami/stacksmith-base/releases"}'
+      fi
+    fi
+  fi
+done
