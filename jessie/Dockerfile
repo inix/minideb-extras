@@ -1,4 +1,4 @@
-FROM bitnami/minideb@sha256:75c3f21808b6f9c516cd27055862a91959d526cea9dc56b6f5c19b6de5042dfd
+FROM bitnami/minideb@sha256:dd4ef341b9be1bf2a7396890189c01475274c33a7b188707e6d0eb89efdbec27
 MAINTAINER Bitnami <containers@bitnami.com>
 
 RUN install_packages curl ca-certificates cron sudo locales procps libaio1 libssl1.0.0 netcat-traditional && \
