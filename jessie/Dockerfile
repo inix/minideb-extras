@@ -31,6 +31,7 @@ RUN cd /tmp && \
   rm tini.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
+ENV BITNAMI_IMAGE_VERSION=jessie-r0
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
