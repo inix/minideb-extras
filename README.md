@@ -5,7 +5,7 @@
 ## TL;DR
 
 ```dockerfile
-FROM gcr.io/stacksmith-images/minideb:jessie
+FROM bitnami/minideb-extras:jessie
 ```
 
 ## About
@@ -18,10 +18,10 @@ The `Dockerfile` installs [Nami](https://github.com/bitnami/nami) and includes a
 
 The image is available in two variants:
 
-|                       Image                       |                    Configuration                    |
-|---------------------------------------------------|-----------------------------------------------------|
-| gcr.io/stacksmith-images/minideb:jessie           | Standard                                            |
-| gcr.io/stacksmith-images/minideb-buildpack:jessie | Buildpack (includes `build-essential`, `git`, etc.) |
+|                  Image                  |                    Configuration                    |
+|-----------------------------------------|-----------------------------------------------------|
+| bitnami/minideb-extras:jessie           | Standard                                            |
+| bitnami/minideb-extras:jessie-buildpack | Buildpack (includes `build-essential`, `git`, etc.) |
 
 ## Usage
 
@@ -30,7 +30,7 @@ Use like a regular base image.
 The following example uses the `install_packages` helper script, provided by `minideb`, to install APT packages from the Debian repositories. The `bitnami-pkg` tool to install `nami` packages published by Bitnami.
 
 ```dockerfile
-FROM gcr.io/stacksmith-images/minideb:jessie
+FROM bitnami/minideb-extras:jessie
 ENV BITNAMI_APP_NAME=apache
 RUN install_packages libssl1.0.0 libaprutil1 libapr1 libc6 libuuid1 libexpat1 \
       libpcre3 libldap-2.4-2 libsasl2-2 libgnutls-deb0-28 zlib1g libp11-kit0 \

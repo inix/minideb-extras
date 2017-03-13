@@ -4,23 +4,29 @@ machine:
   services:
   - docker
   environment:
-    GCLOUD_PROJECT: stacksmith-images
+    RELEASE_SERIES_LIST: jessie
+    LATEST_STABLE: jessie
+    IMAGE_NAME: minideb-extras
+    DOCKER_PROJECT: bitnami
+    QUAY_PROJECT: bitnami
+    GCLOUD_PROJECT: bitnami-containers
 
 dependencies:
   override:
   - docker info
   - gcloud version
+  - curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/docker-pull-cache.sh | bash -
 
 test:
   override:
-  - make ${CIRCLE_TAG:+FLAVORS=$(echo ${CIRCLE_TAG#*/} | cut -d'-' -f1)} DEV_BUILD=1 build
+  - curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/docker-image-test.sh | bash -
 
 deployment:
   development:
     branch: master
     commands:
-    - make DEV_BUILD=1 push
+    - curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/docker-development-image.sh | bash -
   release:
-    tag: /.*/
+    tag: /^.*-r[0-9]+$/
     commands:
-    - make FLAVORS=$(echo ${CIRCLE_TAG#*/} | cut -d'-' -f1) push
+    - curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/docker-release-image.sh | bash -
