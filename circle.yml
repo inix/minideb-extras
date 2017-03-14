@@ -15,7 +15,6 @@ dependencies:
   override:
   - docker info
   - gcloud version
-  - curl -sL https://raw.githubusercontent.com/bitnami/test-infra/master/circle/docker-pull-cache.sh | bash -
 
 test:
   override:
