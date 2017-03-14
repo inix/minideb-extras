@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/bitnami/stacksmith-base/tree/master.svg?style=shield)](https://circleci.com/gh/bitnami/stacksmith-base/tree/master)
+[![CircleCI](https://circleci.com/gh/bitnami/minideb-extras/tree/master.svg?style=shield)](https://circleci.com/gh/bitnami/minideb-extras/tree/master)
 
 # Stacksmith Base Docker image
 
