@@ -30,6 +30,18 @@ RUN cd /tmp && \
   chmod +x /usr/local/bin/tini && \
   rm tini.asc
 
+ENV GOSU_VERSION=1.10 \
+    GOSU_GPG_KEY=B42F6819007F00F88E364FD4036A9C25BF357DD4
+
+RUN cd /tmp && \
+  gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys $GOSU_GPG_KEY && \
+  gpg --fingerprint $GOSU_GPG_KEY | grep -q "Key fingerprint = B42F 6819 007F 00F8 8E36  4FD4 036A 9C25 BF35 7DD4" && \
+  curl -sSL https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc -o gosu.asc && \
+  curl -sSL https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64 -o /usr/local/bin/gosu && \
+  gpg --verify gosu.asc /usr/local/bin/gosu && \
+  chmod +x /usr/local/bin/gosu && \
+  rm gosu.asc
+
 ENV PATH=/opt/bitnami/nami/bin:$PATH
 ENV BITNAMI_IMAGE_VERSION=jessie-r12
 
