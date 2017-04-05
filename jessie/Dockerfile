@@ -7,6 +7,7 @@ RUN install_packages curl ca-certificates cron sudo locales procps libaio1 libss
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
   useradd -ms /bin/bash bitnami && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
+  sed -i -e '/pam_loginuid.so/ s/^#*/#/' /etc/pam.d/cron && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
   echo "bitnami ALL=NOPASSWD: ALL" >> /etc/sudoers
 
