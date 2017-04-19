@@ -102,9 +102,9 @@ print_stacksmith_welcome_page() {
 
 detect_cloud() {
   local CLOUD=unknown
-  if curl $CURL_ARGS -o /dev/null http://instance-data/latest/meta-data/; then
+  if curl $CURL_ARGS -o /dev/null http://169.254.169.254/latest/meta-data/; then
     CLOUD=aws
-  elif curl $CURL_ARGS -o /dev/null http://metadata.google.internal/0.1/meta-data/; then
+  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/0.1/meta-data/; then
     CLOUD=google
   elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/InstanceInfo; then
     CLOUD=azure
@@ -116,7 +116,7 @@ detect_cloud() {
 
 detect_platform() {
   local PLATFORM=unknown
-  if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://instance-data/latest/meta-data/hostname):51678/v1/metadata; then
+  if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://169.254.169.254/latest/meta-data/hostname):51678/v1/metadata; then
     PLATFORM=ecs
   elif [ -f /var/run/secrets/kubernetes.io/serviceaccount/namespace ]; then
     PLATFORM=kubernetes
