@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/bitnami/minideb-extras/tree/master.svg?style=shield)](https://circleci.com/gh/bitnami/minideb-extras/tree/master)
 
-# Stacksmith Base Docker image
+# `bitnami/minideb-extras`
 
 ## TL;DR
 
@@ -10,7 +10,7 @@ FROM bitnami/minideb-extras:jessie
 
 ## About
 
-The Stacksmith Base Docker image is a customized base image for use in Bitnami container images and is built on top of the light-weight and Debian-based `bitnami/minideb` image. Learn more about [bitnami/minideb](https://github.com/bitnami/minideb) in [Minideb: A New Container Base Image](https://engineering.bitnami.com/2016/11/02/minideb-a-new-container-base-image.html).
+The `bitnami/minideb-extras` image is a customized base image for use in Bitnami container images and is built on top of the light-weight and Debian-based `bitnami/minideb` image. Learn more about [bitnami/minideb](https://github.com/bitnami/minideb) in [Minideb: A New Container Base Image](https://engineering.bitnami.com/2016/11/02/minideb-a-new-container-base-image.html).
 
 The `Dockerfile` installs [Nami](https://github.com/bitnami/nami) and includes a `bitnami-pkg` helper script to simplify downloading of Nami modules from the Bitnami package repositories. Additionally the `Dockerfile` installs [tini](https://github.com/krallin/tini)  and is used in the default [entrypoint](../../blob/master/rootfs/entrypoint.sh).
 
