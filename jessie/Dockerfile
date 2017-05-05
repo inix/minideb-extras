@@ -1,5 +1,5 @@
 FROM bitnami/minideb@sha256:bdd77389d7bbe536e0cf442857fabcffb2591fad1553b0e21c3393954bc35d73
-MAINTAINER Bitnami <containers@bitnami.com>
+LABEL maintainer "Bitnami <containers@bitnami.com>"
 
 RUN install_packages curl ca-certificates cron sudo locales procps libaio1 libssl1.0.0 netcat-traditional && \
   update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
