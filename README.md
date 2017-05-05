@@ -81,8 +81,6 @@ The launch data collected includes:
 
   - Image version in use
   - Registry (Dockerhub, etc.)
-  - Platform (Kubernetes, etc.)
-  - Cloud (GCE, AWS, etc.)
 
 Container launch tracking is enabled by default and can be turned off by adding `DISABLE_LAUNCH_TRACKING=1` to the container environment.
 

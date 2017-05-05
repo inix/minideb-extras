@@ -100,57 +100,22 @@ print_stacksmith_welcome_page() {
   log ""
 }
 
-detect_cloud() {
-  local CLOUD=unknown
-  if curl $CURL_ARGS -o /dev/null http://169.254.169.254/latest/meta-data/; then
-    CLOUD=aws
-  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/0.1/meta-data/; then
-    CLOUD=google
-  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/InstanceInfo; then
-    CLOUD=azure
-  elif curl $CURL_ARGS -o /dev/null http://169.254.169.254/metadata/v1/vendor-data; then
-    CLOUD=do
-  fi
-  echo $CLOUD
-}
-
-detect_platform() {
-  local PLATFORM=unknown
-  if curl $CURL_ARGS -o /dev/null http://$(curl $CURL_ARGS http://169.254.169.254/latest/meta-data/hostname):51678/v1/metadata; then
-    PLATFORM=ecs
-  elif [ -f /var/run/secrets/kubernetes.io/serviceaccount/namespace ]; then
-    PLATFORM=kubernetes
-  elif [ -n "$CHE_API" ]; then
-    # CHE_API is set by Eclipse Che and Codenvy as of version 5.0.0-M8
-    if [ "$CHE_API" == "https://codenvy.io/api" ]; then
-      PLATFORM=codenvy
-    else
-      PLATFORM=che
-    fi
-  fi
-  echo $PLATFORM
-}
-
 # Checks for any updates for this Stacksmith stack
 check_for_stack_updates() {
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-stacksmith}
-  CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
-  PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert /opt/bitnami/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
+    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN" \
     -w "|%{http_code}")
 }
 
 # Checks for any updates for this Bitnami Docker image
 check_for_image_updates() {
   ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
-  CLOUD=${BITNAMI_CONTAINER_CLOUD:-$(detect_cloud)}
-  PLATFORM=${BITNAMI_CONTAINER_PLATFORM:-$(detect_platform)}
 
   RESPONSE=$(curl -s --connect-timeout 20 \
     --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN&cloud=$CLOUD&platform=$PLATFORM" \
+    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN" \
     -w "|%{http_code}")
 }
