@@ -15,6 +15,11 @@ print_usage() {
   log "  -c, --checksum             SHA256 verification checksum."
   log "  -h, --help                 Show this help message and exit."
   log ""
+  log "If the package is already available in the /tmp/bitnami/pkg/cache/"
+  log "directory, the download will be skipped. If there is a corresponding"
+  log "file of the same name post-fixed with .sha256 in the directory,"
+  log "that sha will be used instead of the --checksum option."
+  log ""
   log "Examples:"
   log "  - Unpack package"
   log "    \$ bitnami-pkg unpack nginx-1.9.10-0"
@@ -104,6 +109,10 @@ info "Downloading $PACKAGE package"
 if [ -f $CACHE_ROOT/$PACKAGE.tar.gz ]; then
   info "$CACHE_ROOT/$PACKAGE.tar.gz already exists, skipping download."
   cp $CACHE_ROOT/$PACKAGE.tar.gz .
+  if [ -f $CACHE_ROOT/$PACKAGE.tar.gz.sha256 ]; then
+    info "Using the local sha256 from $CACHE_ROOT/$PACKAGE.tar.gz.sha256"
+    PACKAGE_SHA256=$(cat $CACHE_ROOT/$PACKAGE.tar.gz.sha256)
+  fi
 else
   # display cURL progress bar when a tty is attached
   if tty -s; then
