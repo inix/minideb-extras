@@ -153,6 +153,6 @@ rm -rf $INSTALL_ROOT
 if [ "$BITNAMI_PKG_CHMOD" ]; then
   info "Fixing permissions: chmod $BITNAMI_PKG_CHMOD /.nami /opt/bitnami/$PACKAGE_NAME /bitnami"
   # Create /bitnami if it doesn't already exist
-  mkdir -p /bitnami
+  mkdir -p /bitnami/$PACKAGE_NAME
   chmod $BITNAMI_PKG_CHMOD /.nami /opt/bitnami/$PACKAGE_NAME /bitnami
 fi
