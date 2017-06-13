@@ -1,13 +1,12 @@
 FROM bitnami/minideb@sha256:bdd77389d7bbe536e0cf442857fabcffb2591fad1553b0e21c3393954bc35d73
 LABEL maintainer "Bitnami <containers@bitnami.com>"
 
-RUN install_packages curl ca-certificates cron sudo locales procps libaio1 libssl1.0.0 netcat-traditional && \
+RUN install_packages curl ca-certificates sudo locales procps libaio1 libssl1.0.0 && \
   update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
   locale-gen en_US.UTF-8 && \
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
   useradd -ms /bin/bash bitnami && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
-  sed -i -e '/pam_loginuid.so/ s/^#*/#/' /etc/pam.d/cron && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
   echo "bitnami ALL=NOPASSWD: ALL" >> /etc/sudoers
 
