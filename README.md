@@ -18,12 +18,14 @@ The `Dockerfile` installs [Nami](https://github.com/bitnami/nami) and includes a
 
 ## Variants
 
-The image is available in two variants:
+The image is available in the following variants:
 
-|                  Image                  |                    Configuration                    |
-|-----------------------------------------|-----------------------------------------------------|
-| bitnami/minideb-extras:jessie           | Standard                                            |
-| bitnami/minideb-extras:jessie-buildpack | Buildpack (includes `build-essential`, `git`, etc.) |
+|                  Image                   |                    Configuration                    |
+|------------------------------------------|-----------------------------------------------------|
+| bitnami/minideb-extras:jessie            | Standard                                            |
+| bitnami/minideb-extras:stretch           | Standard                                            |
+| bitnami/minideb-extras:jessie-buildpack  | Buildpack (includes `build-essential`, `git`, etc.) |
+| bitnami/minideb-extras:stretch-buildpack | Buildpack (includes `build-essential`, `git`, etc.) |
 
 ## Usage
 
