@@ -150,6 +150,13 @@ nami $1 $PACKAGE $PACKAGE_ARGS
 
 rm -rf $INSTALL_ROOT
 
+if [ "$BITNAMI_PKG_EXTRA_DIRS" ]; then
+    info "Creating extra directories"
+    for i in  ${BITNAMI_PKG_EXTRA_DIRS}; do
+        mkdir -p $i
+    done
+fi
+
 if [ "$BITNAMI_PKG_CHMOD" ]; then
   info "Fixing permissions: chmod $BITNAMI_PKG_CHMOD /.nami /opt/bitnami/$PACKAGE_NAME /bitnami"
   # Create /bitnami if it doesn't already exist
