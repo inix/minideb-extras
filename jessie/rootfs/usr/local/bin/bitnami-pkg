@@ -161,7 +161,7 @@ if [ "$BITNAMI_PKG_CHMOD" ]; then
   DIRS="/.nami /bitnami $BITNAMI_PKG_EXTRA_DIRS"
   # Fix for client modules
   if [[ $PACKAGE_NAME =~ .*-client ]]; then
-    SANITIZED_PACKAGE_NAME=`[[ $PACKAGE_NAME =~ ^(.*)-client ]] && echo ${BASH_REMATCH[1]}`
+    SANITIZED_PACKAGE_NAME=${PACKAGE_NAME%-client}
     DIRS+=" /opt/bitnami/$SANITIZED_PACKAGE_NAME"
   else
     mkdir -p /bitnami/$PACKAGE_NAME
