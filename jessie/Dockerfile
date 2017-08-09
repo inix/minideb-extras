@@ -10,11 +10,11 @@ RUN install_packages curl ca-certificates sudo locales procps libaio1 && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
   echo "bitnami ALL=NOPASSWD: ALL" >> /etc/sudoers
 
-ENV NAMI_VERSION 0.0.6-0
+ENV NAMI_VERSION 0.0.8-0
 
 RUN cd /tmp && \
   curl -sSLO https://nami-prod.s3.amazonaws.com/tools/nami/releases/nami-$NAMI_VERSION-linux-x64.tar.gz && \
-  echo "08c474bf7b866879cd709f7c3efaebec43cfc2eb39c974fd83c18eb19821129a  nami-$NAMI_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
+  echo "62dcdabc99cb31e1387bdbb8bdb13aa14b47e004bd699a1d681ff305b234c15b  nami-$NAMI_VERSION-linux-x64.tar.gz" | sha256sum -c - && \
   mkdir -p /opt/bitnami/nami && \
   tar xzf nami-$NAMI_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/nami && \
   rm nami-$NAMI_VERSION-linux-x64.tar.gz
