@@ -3,8 +3,6 @@
 [[ $BASH_DEBUG ]] && set -x
 
 BITNAMI_PREFIX=/opt/bitnami
-UPDATE_SERVER="https://container.checkforupdates.com"
-CURL_ARGS="-sLf --connect-timeout 1 --speed-time 1 --speed-limit 1024"
 
 # Color Palette
 RESET='\033[0m'
@@ -58,16 +56,6 @@ print_welcome_page() {
   fi
 }
 
-check_for_updates() {
-  if [ -z "$DISABLE_LAUNCH_TRACKING" ]; then
-    if [ -n "$BITNAMI_APP_NAME" ]; then
-      check_for_image_updates
-    elif [ -n "$STACKSMITH_STACK_ID" ]; then
-      check_for_stack_updates
-    fi
-  fi
-}
-
 # Prints the welcome page for this Bitnami Docker image
 print_image_welcome_page() {
   GITHUB_PAGE=https://github.com/bitnami/bitnami-docker-${BITNAMI_APP_NAME}
@@ -98,24 +86,4 @@ print_stacksmith_welcome_page() {
   log "$MSG1"
   log "$MSG2"
   log ""
-}
-
-# Checks for any updates for this Stacksmith stack
-check_for_stack_updates() {
-  ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-stacksmith}
-
-  RESPONSE=$(curl -s --connect-timeout 20 \
-    --cacert /opt/bitnami/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$STACKSMITH_STACK_ID&origin=$ORIGIN" \
-    -w "|%{http_code}")
-}
-
-# Checks for any updates for this Bitnami Docker image
-check_for_image_updates() {
-  ORIGIN=${BITNAMI_CONTAINER_ORIGIN:-DHR}
-
-  RESPONSE=$(curl -s --connect-timeout 20 \
-    --cacert $BITNAMI_PREFIX/updates-ca-cert.pem \
-    "$UPDATE_SERVER/api/v1?image=$BITNAMI_APP_NAME&version=$BITNAMI_IMAGE_VERSION&origin=$ORIGIN" \
-    -w "|%{http_code}")
 }
