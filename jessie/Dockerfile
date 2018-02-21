@@ -1,4 +1,4 @@
-FROM bitnami/minideb@sha256:10c7770037e4a57214a2a4f6a1df6fe0b4cd9ec6c02f59506ee52df57cb79e85
+FROM bitnami/minideb@sha256:57637fe44218ea1674130b790fa4273a9c1242837e9ac5a86ad7f08b58e260f2
 LABEL maintainer "Bitnami <containers@bitnami.com>"
 
 RUN install_packages curl ca-certificates sudo locales procps libaio1 && \
@@ -9,6 +9,12 @@ RUN install_packages curl ca-certificates sudo locales procps libaio1 && \
   mkdir -p /opt/bitnami && chown bitnami:bitnami /opt/bitnami && \
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
   echo "bitnami ALL=NOPASSWD: ALL" >> /etc/sudoers
+
+# The following security actions are recommended by some security scans.
+# https://console.bluemix.net/docs/services/va/va_index.html
+RUN  sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS    90/' /etc/login.defs && \
+  sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS    1/' /etc/login.defs && \
+  sed -i 's/sha512/sha512 minlen=8/' /etc/pam.d/common-password
 
 ENV NAMI_VERSION 0.0.8-0
 
@@ -43,7 +49,7 @@ RUN cd /tmp && \
   rm gosu.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
-ENV BITNAMI_IMAGE_VERSION=jessie-r23
+ENV BITNAMI_IMAGE_VERSION=jessie-r24
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
