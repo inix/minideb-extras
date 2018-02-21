@@ -10,7 +10,7 @@ RUN install_packages curl ca-certificates sudo locales procps libaio1 gnupg dirm
   sed -i -e 's/\s*Defaults\s*secure_path\s*=/# Defaults secure_path=/' /etc/sudoers && \
   echo "bitnami ALL=NOPASSWD: ALL" >> /etc/sudoers
 
-# The following security actions are recommended in some security scans.
+# The following security actions are recommended by some security scans.
 # https://console.bluemix.net/docs/services/va/va_index.html
 RUN  sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS    90/' /etc/login.defs && \
   sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS    1/' /etc/login.defs && \
