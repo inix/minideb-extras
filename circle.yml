@@ -8,7 +8,7 @@ jobs:
           RELEASE_SERIES_LIST: "jessie"
           LATEST_STABLE: "jessie"
           IMAGE_NAME: minideb-extras
-          DOCKER_PROJECT: bitnami
+          DOCKER_PROJECT: bitnamiamd64
           QUAY_PROJECT: bitnami
           GCLOUD_PROJECT: bitnami-containers
 
