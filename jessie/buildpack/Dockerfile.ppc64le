@@ -2,5 +2,5 @@ FROM bitnami/minideb-extras
 
 ENV PATH="/opt/bitnami/git/bin:$PATH"
 
-RUN apt-get install build-essential pkg-config unzip -y
+RUN apt-get update && apt-get install build-essential pkg-config unzip -y
 RUN bitnami-pkg install git-2.16.2-0 --checksum 99a55a8c925945b544b99b8ff083beb8c144bac1447b8205dc58299f20818513
