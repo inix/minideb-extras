@@ -43,6 +43,21 @@ identify_distro() {
   echo "$distro"
 }
 
+identify_arch() {
+  case $(arch) in
+  x86_64)
+    arch=x64
+    ;;
+  ppc64le)
+    arch=ppc64le
+    ;;
+  *)
+   arch="unknown"
+   ;;
+  esac
+  echo $arch
+}
+
 # break up command line for easy parsing and check legal options
 ARGS=$(getopt -o b:c:h -l "bucket:,checksum:,help" -n "bitnami-pkg" -- "$@")
 if [ $? -ne 0 ];
@@ -97,7 +112,7 @@ fi
 INSTALL_ROOT=/tmp/bitnami/pkg/install
 CACHE_ROOT=/tmp/bitnami/pkg/cache
 
-PACKAGE="$2-linux-x64-$(identify_distro)"
+PACKAGE="$2-linux-$(identify_arch)-$(identify_distro)"
 PACKAGE_ARGS=${@:3}
 PACKAGE_NAME=$(echo $PACKAGE | sed 's/-[0-9].*//')
 RELEASE_BUCKET=${RELEASE_BUCKET:-stacksmith}
