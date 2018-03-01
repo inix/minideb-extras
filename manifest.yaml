@@ -11,5 +11,5 @@ manifests:
     image: bitnamiamd64/minideb-extras
     tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
     platform:
-      architecture: ppc64le
+      architecture: amd64
       os: linux
