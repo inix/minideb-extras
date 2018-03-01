@@ -1,0 +1,15 @@
+image: bitnami/minideb-extras
+tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
+manifests:
+  -
+    image: bitnamippc64le/minideb-extras
+    tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
+    platform:
+      architecture: ppc64le
+      os: linux
+  -
+    image: bitnamiamd64/minideb-extras
+    tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
+    platform:
+      architecture: amd64
+      os: linux
