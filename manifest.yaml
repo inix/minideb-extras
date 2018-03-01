@@ -1,15 +1,96 @@
-image: bitnami/minideb-extras
-tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
+image: bitnami/minideb-extras:jessie-buildpack
 manifests:
   -
-    image: bitnamippc64le/minideb-extras
-    tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
+    image: bitnamiamd64/minideb-extras:jessie-buildpack
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:jessie-buildpack
     platform:
       architecture: ppc64le
       os: linux
+image: bitnami/minideb-extras:jessie-r27-buildpack
+manifests:
   -
-    image: bitnamiamd64/minideb-extras
-    tags: [latest-buildpack,latest,jessie-r26-buildpack,jessie-r26,jessie-buildpack,jessie,jessie-master-buildpack,jessie-master]
+    image: bitnamiamd64/minideb-extras:jessie-r27-buildpack
     platform:
       architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:jessie-r27-buildpack
+    platform:
+      architecture: ppc64le
+      os: linux
+image: bitnami/minideb-extras:jessie-master-buildpack
+manifests:
+  -
+    image: bitnamiamd64/minideb-extras:jessie-master-buildpack
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:jessie-master-buildpack
+    platform:
+      architecture: ppc64le
+      os: linux
+image: bitnami/minideb-extras:latest-buildpack
+manifests:
+  -
+    image: bitnamiamd64/minideb-extras:latest-buildpack
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:latest-buildpack
+    platform:
+      architecture: ppc64le
+      os: linux
+image: bitnami/minideb-extras:latest
+manifests:
+  -
+    image: bitnamiamd64/minideb-extras:latest
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:latest
+    platform:
+      architecture: ppc64le
+      os: linux
+image: bitnami/minideb-extras:jessie-master
+manifests:
+  -
+    image: bitnamiamd64/minideb-extras:jessie-master
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:jessie-master
+    platform:
+      architecture: ppc64le
+      os: linux
+image: bitnami/minideb-extras:jessie
+manifests:
+  -
+    image: bitnamiamd64/minideb-extras:jessie
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:jessie
+    platform:
+      architecture: ppc64le
+      os: linux
+image: bitnami/minideb-extras:jessie-r27
+manifests:
+  -
+    image: bitnamiamd64/minideb-extras:jessie-r27
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: bitnamippc64le/minideb-extras:jessie-r27
+    platform:
+      architecture: ppc64le
       os: linux
