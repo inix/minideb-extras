@@ -159,6 +159,9 @@ fi
 
 if [ "$BITNAMI_PKG_CHMOD" ]; then
     DIRS="/.nami /bitnami $BITNAMI_PKG_EXTRA_DIRS"
+    if ! [[ $PACKAGE_NAME =~ .*-client ]]; then
+      mkdir -p /bitnami/$PACKAGE_NAME
+    fi
     # We need to be in the $HOME directory in order to nami inspect works
     cd $HOME
     DIRS+=$(nami inspect $PACKAGE_NAME | grep -e 'installdir' | cut -f4 -d\")
