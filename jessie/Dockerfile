@@ -49,7 +49,7 @@ RUN cd /tmp && \
   rm gosu.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
-ENV BITNAMI_IMAGE_VERSION=jessie-r24
+ENV BITNAMI_IMAGE_VERSION=jessie-r25
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
