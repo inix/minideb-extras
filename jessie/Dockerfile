@@ -1,4 +1,4 @@
-FROM bitnami/minideb@sha256:0f5233cb71479332628b2c4a61c577cdfe9aa623095ee37e5288dbbf3d35b223
+FROM bitnami/minideb@sha256:df8a3dc177eb8a5dfaf71e107db400de802d472e14f86cc2f955f87cad03436b
 LABEL maintainer "Bitnami <containers@bitnami.com>"
 
 RUN install_packages curl ca-certificates sudo locales procps libaio1 && \
@@ -49,7 +49,7 @@ RUN cd /tmp && \
   rm gosu.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
-ENV BITNAMI_IMAGE_VERSION=jessie-r28
+ENV BITNAMI_IMAGE_VERSION=jessie-r29
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
