@@ -25,14 +25,14 @@ RUN cd /tmp && \
   tar xzf nami-$NAMI_VERSION-linux-x64.tar.gz --strip 1 -C /opt/bitnami/nami && \
   rm nami-$NAMI_VERSION-linux-x64.tar.gz
 
-ENV TINI_VERSION v0.13.2
-ENV TINI_GPG_KEY 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7
-
 ENV GPG_KEY_SERVERS_LIST ha.pool.sks-keyservers.net \
                      hkp://p80.pool.sks-keyservers.net:80 \
                      keyserver.ubuntu.com \
                      hkp://keyserver.ubuntu.com:80 \
                      pgp.mit.edu
+
+ENV TINI_VERSION v0.13.2
+ENV TINI_GPG_KEY 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7
 
 RUN cd /tmp && \
   for server in $(shuf -e $GPG_KEY_SERVERS_LIST) ; do \
