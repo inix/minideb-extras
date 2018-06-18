@@ -28,12 +28,14 @@ RUN cd /tmp && \
 ENV TINI_VERSION v0.13.2
 ENV TINI_GPG_KEY 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7
 
+ENV GPG_KEY_SERVERS_LIST ha.pool.sks-keyservers.net \
+                     hkp://p80.pool.sks-keyservers.net:80 \
+                     keyserver.ubuntu.com \
+                     hkp://keyserver.ubuntu.com:80 \
+                     pgp.mit.edu
+
 RUN cd /tmp && \
-  for server in $(shuf -e ha.pool.sks-keyservers.net \
-                          hkp://p80.pool.sks-keyservers.net:80 \
-                          keyserver.ubuntu.com \
-                          hkp://keyserver.ubuntu.com:80 \
-                          pgp.mit.edu) ; do \
+  for server in $(shuf -e $GPG_KEY_SERVERS_LIST) ; do \
       gpg --keyserver "$server" --recv-keys $TINI_GPG_KEY && break || : ; \
   done && \
   gpg --fingerprint $TINI_GPG_KEY | grep -q "6380 DC42 8747 F6C3 93FE  ACA5 9A84 159D 7001 A4E5" && \
@@ -47,11 +49,7 @@ ENV GOSU_VERSION=1.10 \
     GOSU_GPG_KEY=B42F6819007F00F88E364FD4036A9C25BF357DD4
 
 RUN cd /tmp && \
-  for server in $(shuf -e ha.pool.sks-keyservers.net \
-                          hkp://p80.pool.sks-keyservers.net:80 \
-                          keyserver.ubuntu.com \
-                          hkp://keyserver.ubuntu.com:80 \
-                          pgp.mit.edu) ; do \
+  for server in $(shuf -e $GPG_KEY_SERVERS_LIST) ; do \
       gpg --keyserver "$server" --recv-keys $GOSU_GPG_KEY && break || : ; \
   done && \
   gpg --fingerprint $GOSU_GPG_KEY | grep -q "B42F 6819 007F 00F8 8E36  4FD4 036A 9C25 BF35 7DD4" && \
