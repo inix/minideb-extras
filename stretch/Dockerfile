@@ -26,10 +26,10 @@ RUN cd /tmp && \
   rm nami-$NAMI_VERSION-linux-x64.tar.gz
 
 ENV GPG_KEY_SERVERS_LIST ha.pool.sks-keyservers.net \
-                     hkp://p80.pool.sks-keyservers.net:80 \
-                     keyserver.ubuntu.com \
-                     hkp://keyserver.ubuntu.com:80 \
-                     pgp.mit.edu
+                         hkp://p80.pool.sks-keyservers.net:80 \
+                         keyserver.ubuntu.com \
+                         hkp://keyserver.ubuntu.com:80 \
+                         pgp.mit.edu
 
 ENV TINI_VERSION v0.13.2
 ENV TINI_GPG_KEY 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7
