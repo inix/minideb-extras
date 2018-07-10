@@ -2,7 +2,7 @@ FROM bitnami/minideb@sha256:8c7b2d3bbe62146429fc00898a4e428a45a0d61d2676c0576492
 LABEL maintainer "Bitnami <containers@bitnami.com>"
 ENV IMAGE_OS=debian-9
 
-RUN install_packages curl ca-certificates sudo locales procps libaio1 gnupg dirmngr && \
+RUN install_packages curl ca-certificates sudo libarchive-tools locales procps libaio1 gnupg dirmngr && \
   update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
   locale-gen en_US.UTF-8 && \
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
@@ -61,7 +61,7 @@ RUN cd /tmp && \
   rm gosu.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
-ENV BITNAMI_IMAGE_VERSION=stretch-r72
+ENV BITNAMI_IMAGE_VERSION=stretch-r73
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
