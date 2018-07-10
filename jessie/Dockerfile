@@ -1,7 +1,7 @@
 FROM bitnami/minideb@sha256:b678c90feb1c8f2738022efebb656a7cceab5e43f451774c44f71f6947113ec4
 LABEL maintainer "Bitnami <containers@bitnami.com>"
 
-RUN install_packages curl ca-certificates bsdtar sudo locales procps libaio1 && \
+RUN install_packages curl ca-certificates sudo locales procps libaio1 && \
   update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
   locale-gen en_US.UTF-8 && \
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
