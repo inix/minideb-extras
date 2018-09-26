@@ -17,7 +17,7 @@ RUN  sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS    90/' /etc/login.defs && \
   sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS    1/' /etc/login.defs && \
   sed -i 's/sha512/sha512 minlen=8/' /etc/pam.d/common-password
 
-ENV NAMI_VERSION 0.0.9-0
+ENV NAMI_VERSION 1.0.0-1
 
 RUN cd /tmp && \
   curl -sSLO https://nami-prod.s3.amazonaws.com/tools/nami/releases/nami-$NAMI_VERSION-linux-x64.tar.gz && \
@@ -61,7 +61,7 @@ RUN cd /tmp && \
   rm gosu.asc
 
 ENV PATH=/opt/bitnami/nami/bin:$PATH
-ENV BITNAMI_IMAGE_VERSION=stretch-r150
+ENV BITNAMI_IMAGE_VERSION=stretch-r151
 
 COPY rootfs /
 ENTRYPOINT ["/entrypoint.sh"]
