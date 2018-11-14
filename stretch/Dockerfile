@@ -1,6 +1,6 @@
 FROM bitnami/minideb@sha256:125e876d386f39e3a64c887ee495a97fe60f4b2613b8f57893047727bc978c60
 LABEL maintainer "Bitnami <containers@bitnami.com>"
-ENV IMAGE_OS=debian-9
+ENV IMAGE_OS=debian-8
 
 RUN install_packages curl ca-certificates sudo locales procps libaio1 gnupg dirmngr && \
   update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
